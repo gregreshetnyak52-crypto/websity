@@ -35,6 +35,8 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,sans-serif;background
 .page-btn{padding:8px 12px;border:none;border-radius:6px;background:var(--panel);color:var(--text);cursor:pointer}
 .page-btn.active{background:var(--accent)}
 .saved{background:var(--panel);padding:20px;border-radius:12px;margin-top:30px}
+.saved-item{display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--card);border-radius:8px;margin:8px 0}
+.saved-item .remove-btn{background:#ff4757;padding:5px 10px;border:none;border-radius:4px;color:white;cursor:pointer}
 .tag{padding:3px 10px;background:var(--panel);border-radius:12px;font-size:11px;color:var(--muted);margin-right:6px}
 .tag-cloud{margin:10px 0}
 .footer{padding:30px 8%;background:#020617;margin-top:50px;text-align:center;color:var(--muted)}
@@ -195,7 +197,7 @@ const chipWrap=document.getElementById("chips");
 CATS.forEach(t=>{let c=document.createElement("div");c.className="chip";c.innerText=t;c.onclick=()=>{activeCategory=t;document.querySelectorAll(".chip").forEach(x=>x.classList.remove("active"));c.classList.add("active");applySearch()};chipWrap.appendChild(c)});
 let likes=JSON.parse(localStorage.getItem("likes"))||{};
 let saved=JSON.parse(localStorage.getItem("saved"))||[];
-let current=[];let page=1;const perPage=10;
+let current=[];let page=1;const perPage=12;
 function render(list){current=list;let start=(page-1)*perPage;let paginated=list.slice(start,start+perPage);document.getElementById("meta").innerText=list.length+" проектов | страница "+page;const res=document.getElementById("res");res.innerHTML="";paginated.forEach((p,i)=>{let likeCount=likes[p.title]||0;let div=document.createElement("div");div.className="card";let tagsHTML=p.tags.split(" ").map(t=>"<span class='tag'>"+t+"</span>").join("");div.innerHTML="<h3>"+p.title+"</h3><div class='tag-cloud'>"+tagsHTML+"</div><p style='margin-top:15px'><b>Описание:</b> "+p.desc+"</p><p><b>Цель:</b> "+p.goal+"</p><p><b>Этапы выполнения:</b> "+p.steps+"</p><button class='btn' style='margin-right:5px' onclick='like(\""+p.title+"\")'>❤️ "+likeCount+"</button><button class='btn' onclick='saveItem("+(start+i)+")'>💾 Сохранить</button>";res.appendChild(div)});renderPagination(list.length)}
 function renderPagination(total){const pages=Math.ceil(total/perPage);const wrap=document.getElementById("pagination");wrap.innerHTML="";for(let i=1;i<=pages;i++){let btn=document.createElement("button");btn.className="page-btn"+(i===page?" active":"");btn.innerText=i;btn.onclick=()=>{page=i;render(current)};wrap.appendChild(btn)}}
 function applySearch(){page=1;let val=document.getElementById("input").value.toLowerCase();let level=document.getElementById("level").value;let sort=document.getElementById("sort").value;let list=projects.filter(p=>(p.tags.includes(val)||p.title.toLowerCase().includes(val)||val==="")&&(level===""||p.level===level)&&(activeCategory===""||p.tags.includes(activeCategory)));if(sort==="likes")list.sort((a,b)=>(likes[b.title]||0)-(likes[a.title]||0));if(sort==="title")list.sort((a,b)=>a.title.localeCompare(b.title));render(list)}
@@ -204,7 +206,8 @@ function popular(){page=1;let sorted=[...projects].sort((a,b)=>(likes[b.title]||
 function like(title){likes[title]=(likes[title]||0)+1;localStorage.setItem("likes",JSON.stringify(likes));render(current)}
 function saveItem(i){if(!saved.find(p=>p.title===current[i].title)){saved.push(current[i]);localStorage.setItem("saved",JSON.stringify(saved));loadSaved()}}
 function removeSaved(i){saved.splice(i,1);localStorage.setItem("saved",JSON.stringify(saved));loadSaved()}
-function loadSaved(){let div=document.getElementById("savedList");div.innerHTML="";if(saved.length===0){div.innerHTML="<p>Нет сохранённых проектов</p>"}else{saved.forEach((p,i)=>{let el=document.createElement("div");el.className="card";el.innerHTML="<b>"+p.title+"</b> <button class='btn' onclick='removeSaved("+i+")'>🗑️</button>";div.appendChild(el)})}}
+function loadSaved(){let div=document.getElementById("savedList");div.innerHTML="";if(saved.length===0){div.innerHTML="<p>Нет сохранённых проектов</p>"}else{saved.forEach((p,i)=>{let el=document.createElement("div");el.className="card";let tagsHTML=p.tags.split(" ").map(t=>"<span class='tag'>"+t+"</span>").join("");el.innerHTML="<div style='display:flex;justify-content:space-between;align-items:start'><div style='flex:1'><b>"+p.title+"</b><div class='tag-cloud'>"+tagsHTML+"</div><p style='margin-top:10px'>"+p.desc+"</p><p><b>Цель:</b> "+p.goal+"</p><p><b>Этапы:</b> "+p.steps+"</p></div><div style='margin-left:15px'><button class='btn' onclick='exportOne("+i+")'>📥 PDF</button><br><br><button class='btn' onclick='removeSaved("+i+")'>🗑️</button></div></div>";div.appendChild(el)})}}
+function exportOne(i){let p=saved[i];let content=p.title+"\nКатегория: "+p.tags+"\nСложность: "+p.level+"\n\nОписание: "+p.desc+"\n\nЦель: "+p.goal+"\n\nЭтапы: "+p.steps;const blob=new Blob([content],{type:"text/plain;charset=utf-8"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=p.title.replace(/[^a-zA-Zа-яА-Я0-9]/g,"_")+".txt";a.click();}
 function toggleTheme(){let d=document.documentElement;if(d.getAttribute("data-theme")==="light"){d.setAttribute("data-theme","dark");document.querySelector(".theme-btn").innerText="☀️"}else{d.setAttribute("data-theme","light");document.querySelector(".theme-btn").innerText="🌙"}}
 loadSaved();render(projects);
 </script>
