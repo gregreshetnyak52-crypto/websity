@@ -6,43 +6,50 @@
 <title>Project Finder PRO</title>
 <style>
 :root{--bg:#0b1220;--panel:#0f172a;--card:#111a2e;--muted:#8ea0c7;--text:#e6ecff;--accent:#6d7cff}
+:root{--c1:#ff6b6b;--c2:#4ecdc4;--c3:#ffe66d;--c4:#95e1d3;--c5:#a29bfe;--c6:#fd79ab;--c7:#fab1a0;--c8:#00cec9}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(#0b1220,#0e1730);color:var(--text)}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460);color:var(--text)}
 .header{position:sticky;top:0;z-index:100;display:flex;justify-content:space-between;padding:15px 8%;background:rgba(0,0,0,0.7);backdrop-filter:blur(10px)}
 .nav a{margin-left:15px;color:#cbd5ff;text-decoration:none}
-.hero{height:70vh;display:flex;align-items:center;justify-content:center;text-align:center;background:linear-gradient(#0008,#000c),url("hero.jpg") center/cover}
-.hero h1{font-size:3em;margin:0 0 10px}
-.hero p{font-size:1.2em;color:#8ea0c7}
+.nav a:hover{color:var(--c3)}
+.hero{height:70vh;display:flex;align-items:center;justify-content:center;text-align:center;background:linear-gradient(135deg,#667eea,#764ba2);position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;width:200%;height:200%;background:radial-gradient(circle,rgba(255,255,255,0.1) 1px,transparent 1px);background-size:30px 30px;animation:move 20s linear infinite}
+@keyframes move{0%{transform:translate(0,0)}100%{transform:translate(-50%,-50%)}}
+.hero h1{font-size:3em;margin:0 0 10px;text-shadow:3px 3px 0 var(--c1)}
+.hero p{font-size:1.2em;color:#ffe}
 .container{padding:40px 8%;max-width:1200px;margin:0 auto}
-.container h2{font-size:2em;margin-bottom:30px}
+.container h2{font-size:2em;margin-bottom:30px;background:linear-gradient(90deg,var(--c1),var(--c2),var(--c3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .teacher{display:flex;gap:30px;flex-wrap:wrap;align-items:center}
-.teacher img{width:220px;border-radius:16px}
+.teacher img{width:220px;border-radius:16px;border:4px solid var(--c2)}
 .grid{display:grid;grid-template-columns:280px 1fr;gap:25px}
-.sidebar{background:var(--panel);padding:20px;border-radius:12px}
+.sidebar{background:var(--panel);padding:20px;border-radius:16px;border:2px solid var(--c5)}
 .sidebar select,.sidebar input{width:100%;padding:10px;margin-top:10px;border-radius:8px;border:none;background:var(--card);color:var(--text)}
-.btn{background:var(--accent);border:none;padding:10px 16px;color:white;border-radius:8px;margin:5px 5px 5px 0;cursor:pointer;font-size:14px}
-.btn:hover{opacity:0.9}
-.chip{display:inline-block;padding:6px 12px;background:var(--card);border-radius:20px;margin:4px;cursor:pointer;font-size:13px}
-.chip.active{background:var(--accent)}
-.card{background:var(--card);padding:20px;border-radius:12px;margin-top:20px}
-.card h3{font-size:1.3em;margin:0 0 15px}
+.btn{background:linear-gradient(135deg,var(--c1),var(--c6));border:none;padding:10px 16px;color:white;border-radius:25px;margin:5px 5px 5px 0;cursor:pointer;font-size:14px;font-weight:bold;transition:all 0.3s;box-shadow:0 4px 15px rgba(255,107,107,0.3)}
+.btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(255,107,107,0.5)}
+.btn:active{transform:scale(0.95)}
+.chip{display:inline-block;padding:8px 14px;background:var(--card);border-radius:20px;margin:4px;cursor:pointer;font-size:13px;border:2px solid transparent;transition:all 0.3s}
+.chip:hover{border-color:var(--c2);transform:scale(1.05)}
+.chip.active{background:linear-gradient(135deg,var(--c2),var(--c8));border-color:var(--c3)}
+.card{background:var(--card);padding:20px;border-radius:16px;margin-top:20px;border:2px solid transparent;transition:all 0.3s;box-shadow:0 4px 15px rgba(0,0,0,0.2)}
+.card:hover{border-color:var(--c2);transform:translateY(-5px);box-shadow:0 8px 25px rgba(78,205,196,0.3)}
+.card h3{font-size:1.3em;margin:0 0 15px;background:linear-gradient(90deg,var(--c2),var(--c1));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .card p{line-height:1.6;margin:10px 0}
 .card ul{margin:10px 0 10px 20px}
 .card li{margin:6px 0}
 .meta{color:var(--muted);margin-bottom:15px}
 .pagination{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
-.page-btn{padding:8px 12px;border:none;border-radius:6px;background:var(--panel);color:var(--text);cursor:pointer}
-.page-btn.active{background:var(--accent)}
-.saved{background:var(--panel);padding:20px;border-radius:12px;margin-top:30px}
-.saved-item{display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--card);border-radius:8px;margin:8px 0}
-.saved-item .remove-btn{background:#ff4757;padding:5px 10px;border:none;border-radius:4px;color:white;cursor:pointer}
-.tag{padding:3px 10px;background:var(--panel);border-radius:12px;font-size:11px;color:var(--muted);margin-right:6px}
+.page-btn{padding:10px 16px;border:none;border-radius:10px;background:var(--panel);color:var(--text);cursor:pointer;font-weight:bold;transition:all 0.3s}
+.page-btn:hover{background:var(--c5)}
+.page-btn.active{background:linear-gradient(135deg,var(--c5),var(--c6));transform:scale(1.1)}
+.saved{background:var(--panel);padding:20px;border-radius:16px;margin-top:30px;border:2px dashed var(--c3)}
+.saved h3{color:var(--c3)}
+.tag{padding:5px 12px;background:linear-gradient(135deg,var(--c5),var(--c6));border-radius:12px;font-size:11px;color:white;margin-right:6px}
 .tag-cloud{margin:10px 0}
 .footer{padding:30px 8%;background:#020617;margin-top:50px;text-align:center;color:var(--muted)}
-.theme-btn{position:fixed;bottom:20px;right:20px;width:50px;height:50px;border-radius:50%;background:var(--accent);border:none;cursor:pointer;font-size:20px;z-index:99}
+.theme-btn{position:fixed;bottom:20px;right:20px;width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,var(--c1),var(--c2));border:none;cursor:pointer;font-size:20px;z-index:99}
 .pamjatka-section{margin-top:40px}
-.pamjatka-section .card{margin-top:25px}
+.pamjatka-section .card{margin-top:25px;border-left:4px solid var(--c2)}
 @media(max-width:768px){.grid{grid-template-columns:1fr}.header{flex-direction:column;gap:10px}.container{padding:20px 5%}.hero{height:50vh}.hero h1{font-size:2em}}
 </style>
 </head>
@@ -53,7 +60,7 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,sans-serif;background
 <div class="nav"><a href="#home">Главная</a><a href="#teacher">Руководитель</a><a href="#pamjatka">Памятка</a><a href="#projects">Проекты</a></div>
 </div>
 <div class="hero" id="home"><div><h1>Найди идею проекта</h1><p>Полноценный продукт без ИИ</p><a href="#projects"><button class="btn" style="font-size:18px;padding:15px 30px">Начать</button></a></div></div>
-<div class="container" id="teacher"><h2>Научный руководитель</h2><div class="teacher"><img src="teacher.png"><div><p style="font-size:1.2em"><b>Руководитель проектной деятельности</b></p><p>Помогает ученикам создавать проекты и защищать их.</p><p class="meta">Поддержка и консультации</p></div></div></div>
+<div class="container" id="teacher"><h2>Руководитель научной деятельности</h2><div class="teacher"><img src="teacher.png"><div><p style="font-size:1.4em"><b>👩‍🏫 Болдурчиди Евгения Михайловна</b></p><p>Руководитель научной деятельности</p><p>Помогает ученикам создавать научные проекты и защищать их.</p><p class="meta">Консультации и поддержка</p></div></div></div>
 <div class="container" id="pamjatka"><h2>Памятка для учеников</h2>
 <div class="pamjatka-section">
 <div class="card"><h3>Для 1-4 класса</h3><p>При организации работы в начальной школе необходимо учитывать возрастные психолого-физиологические особенности детей младшего школьного возраста.</p><ul><li>Темы детских работ выбираются из содержания учебных предметов</li><li>Проблема проекта должна быть в области познавательных интересов ребёнка</li><li>Длительность выполнения проекта — 3-4 недели</li><li>Текстовый файл не обязателен!</li></ul></div>
@@ -85,7 +92,12 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,sans-serif;background
 <div class="saved"><h3>Сохранённые проекты</h3><div id="savedList"></div></div>
 </div>
 </div></div>
-<div class="footer">Project Finder © 2026</div>
+<div class="footer">
+📍 Москва, ул. Верхняя, д. 20, стр. 3, ЖК «Суббота»<br>
+🌐 <a href="https://leaders-is.ru/" target="_blank" style="color:#6d7cff">leaders-is.ru</a><br>
+<hr style="margin:20px 0;border:none;border-top:1px solid #333">
+Project Finder © 2026
+</div>
 <script>
 const CATS=["искусственный интеллект","роботы","виртуальная реальность","интернет вещей","финтех","кибербезопасность","образование","здоровье","климат","блокчейн","маркетинг","дизайн","спорт","бизнес","программирование","экология"];
 const projects=[
@@ -314,8 +326,9 @@ const chipWrap=document.getElementById("chips");
 CATS.forEach(t=>{let c=document.createElement("div");c.className="chip";c.innerText=t;c.onclick=()=>{activeCategory=t;document.querySelectorAll(".chip").forEach(x=>x.classList.remove("active"));c.classList.add("active");applySearch()};chipWrap.appendChild(c)});
 let likes=JSON.parse(localStorage.getItem("likes"))||{};
 let saved=JSON.parse(localStorage.getItem("saved"))||[];
-let current=[];let page=1;const perPage=12;
-function render(list){current=list;let start=(page-1)*perPage;let paginated=list.slice(start,start+perPage);document.getElementById("meta").innerText=list.length+" проектов | страница "+page;const res=document.getElementById("res");res.innerHTML="";paginated.forEach((p,i)=>{let likeCount=likes[p.title]||0;let div=document.createElement("div");div.className="card";let tagsHTML=p.tags.split(" ").map(t=>"<span class='tag'>"+t+"</span>").join("");div.innerHTML="<h3>"+p.title+"</h3><div class='tag-cloud'>"+tagsHTML+"</div><p style='margin-top:15px'><b>Описание:</b> "+p.desc+"</p><p><b>Цель:</b> "+p.goal+"</p><p><b>Этапы выполнения:</b> "+p.steps+"</p><button class='btn' style='margin-right:5px' onclick='like(\""+p.title+"\")'>❤️ "+likeCount+"</button><button class='btn' onclick='saveItem("+(start+i)+")'>💾 Сохранить</button>";res.appendChild(div)});renderPagination(list.length)}
+let current=[];let page=1;const perPage=5;
+let tagColors={};
+function render(list){current=list;let start=(page-1)*perPage;let paginated=list.slice(start,start+perPage);document.getElementById("meta").innerText=list.length+" проектов | страница "+page;const res=document.getElementById("res");res.innerHTML="";paginated.forEach((p,i)=>{let likeCount=likes[p.title]||0;let div=document.createElement("div");div.className="card";let tags=p.tags.split(" ");let tagsHTML=tags.map(t=>{if(!tagColors[t])tagColors[t]=['#ff6b6b','#4ecdc4','#ffe66d','#a29bfe','#fd79ab','#00cec9','#fab1a0','#95e1d3'][Math.floor(Math.random()*8)];return`<span class='tag' style='background:${tagColors[t]}'>${t}</span>`}).join("");let levelColor=p.level==='easy'?'#4ecdc4':p.level==='medium'?'#ffe66d':'#ff6b6b';let levelIcon=p.level==='easy'?'⭐':p.level==='medium'?'⭐⭐':'⭐⭐⭐';div.innerHTML="<h3>"+p.title+" 🚀</h3><div class='tag-cloud'>"+tagsHTML+"</div><p style='margin-top:12px'>📝 "+p.desc+"</p><p>🎯 <b>Цель:</b> "+p.goal+"</p><p>📋 <b>Этапы:</b> "+p.steps+"</p><p style='color:"+levelColor+";font-weight:bold'>"+levelIcon+" "+p.level.toUpperCase()+"</p><button class='btn' style='margin-right:5px' onclick='like(\""+p.title+"\")'>❤️ "+likeCount+"</button><button class='btn' onclick='saveItem("+(start+i)+")'>💾 Сохранить</button>";res.appendChild(div)});renderPagination(list.length)}
 function renderPagination(total){const pages=Math.ceil(total/perPage);const wrap=document.getElementById("pagination");wrap.innerHTML="";for(let i=1;i<=pages;i++){let btn=document.createElement("button");btn.className="page-btn"+(i===page?" active":"");btn.innerText=i;btn.onclick=()=>{page=i;render(current)};wrap.appendChild(btn)}}
 function applySearch(){page=1;let val=document.getElementById("input").value.toLowerCase();let level=document.getElementById("level").value;let sort=document.getElementById("sort").value;let list=projects.filter(p=>(p.tags.includes(val)||p.title.toLowerCase().includes(val)||val==="")&&(level===""||p.level===level)&&(activeCategory===""||p.tags.includes(activeCategory)));if(sort==="likes")list.sort((a,b)=>(likes[b.title]||0)-(likes[a.title]||0));if(sort==="title")list.sort((a,b)=>a.title.localeCompare(b.title));render(list)}
 function random(){page=1;let shuffled=[...projects].sort(()=>0.5-Math.random());render(shuffled)}
@@ -323,7 +336,7 @@ function popular(){page=1;let sorted=[...projects].sort((a,b)=>(likes[b.title]||
 function like(title){likes[title]=(likes[title]||0)+1;localStorage.setItem("likes",JSON.stringify(likes));render(current)}
 function saveItem(i){if(!saved.find(p=>p.title===current[i].title)){saved.push(current[i]);localStorage.setItem("saved",JSON.stringify(saved));loadSaved()}}
 function removeSaved(i){saved.splice(i,1);localStorage.setItem("saved",JSON.stringify(saved));loadSaved()}
-function loadSaved(){let div=document.getElementById("savedList");div.innerHTML="";if(saved.length===0){div.innerHTML="<p>Нет сохранённых проектов</p>"}else{saved.forEach((p,i)=>{let el=document.createElement("div");el.className="card";let tagsHTML=p.tags.split(" ").map(t=>"<span class='tag'>"+t+"</span>").join("");el.innerHTML="<div style='display:flex;justify-content:space-between;align-items:start'><div style='flex:1'><b>"+p.title+"</b><div class='tag-cloud'>"+tagsHTML+"</div><p style='margin-top:10px'>"+p.desc+"</p><p><b>Цель:</b> "+p.goal+"</p><p><b>Этапы:</b> "+p.steps+"</p></div><div style='margin-left:15px'><button class='btn' onclick='exportOne("+i+")'>📥 PDF</button><br><br><button class='btn' onclick='removeSaved("+i+")'>🗑️</button></div></div>";div.appendChild(el)})}}
+function loadSaved(){let div=document.getElementById("savedList");div.innerHTML="";if(saved.length===0){div.innerHTML="<p>Нет сохранённых проектов</p>"}else{saved.forEach((p,i)=>{let el=document.createElement("div");el.className="card";let tags=p.tags.split(" ");let tagsHTML=tags.map(t=>{if(!tagColors[t])tagColors[t]=['#ff6b6b','#4ecdc4','#ffe66d','#a29bfe','#fd79ab','#00cec9','#fab1a0','#95e1d3'][Math.floor(Math.random()*8)];return`<span class='tag' style='background:${tagColors[t]}'>${t}</span>`}).join("");let levelColor=p.level==='easy'?'#4ecdc4':p.level==='medium'?'#ffe66d':'#ff6b6b';let levelIcon=p.level==='easy'?'⭐':p.level==='medium'?'⭐⭐':'⭐⭐⭐';el.innerHTML="<div style='display:flex;justify-content:space-between;align-items:start'><div style='flex:1'><h3>"+p.title+" 🚀</h3><div class='tag-cloud'>"+tagsHTML+"</div><p style='margin-top:10px'>📝 "+p.desc+"</p><p>🎯 <b>Цель:</b> "+p.goal+"</p><p>📋 <b>Этапы:</b> "+p.steps+"</p><p style='color:"+levelColor+";font-weight:bold'>"+levelIcon+" "+p.level.toUpperCase()+"</p></div><div style='margin-left:15px'><button class='btn' onclick='exportOne("+i+")'>📥 PDF</button><br><br><button class='btn' onclick='removeSaved("+i+")'>🗑️</button></div></div>";div.appendChild(el)})}}
 function exportOne(i){let p=saved[i];let content=p.title+"\nКатегория: "+p.tags+"\nСложность: "+p.level+"\n\nОписание: "+p.desc+"\n\nЦель: "+p.goal+"\n\nЭтапы: "+p.steps;const blob=new Blob([content],{type:"text/plain;charset=utf-8"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=p.title.replace(/[^a-zA-Zа-яА-Я0-9]/g,"_")+".txt";a.click();}
 function toggleTheme(){let d=document.documentElement;if(d.getAttribute("data-theme")==="light"){d.setAttribute("data-theme","dark");document.querySelector(".theme-btn").innerText="☀️"}else{d.setAttribute("data-theme","light");document.querySelector(".theme-btn").innerText="🌙"}}
 loadSaved();render(projects);
