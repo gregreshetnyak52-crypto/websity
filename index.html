@@ -57,7 +57,7 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,sans-serif;background
 
 <div class="header">
 <div style="font-size:1.3em;font-weight:bold">Project Finder PRO</div>
-<div class="nav"><a href="#home">Главная</a><a href="#teacher">Руководитель</a><a href="#pamjatka">Памятка</a><a href="#projects">Проекты</a></div>
+<div class="nav"><a href="#home">Главная</a><a href="#teacher">Руководитель</a><a href="#pamjatka">Памятка</a><a href="#projects">Проекты</a><a href="#favorites">Избранное</a></div>
 </div>
 <div class="hero" id="home"><div><h1>Найди идею проекта</h1><p>Полноценный продукт без ИИ</p><a href="#projects"><button class="btn" style="font-size:18px;padding:15px 30px">Начать</button></a></div></div>
 <div class="container" id="teacher"><h2>Руководитель научной деятельности</h2><div class="teacher"><img src="teacher.png"><div><p style="font-size:1.4em"><b>👩‍🏫 Болдурчиди Евгения Михайловна</b></p><p>Руководитель научной деятельности</p><p>Помогает ученикам создавать научные проекты и защищать их.</p><p class="meta">Консультации и поддержка</p></div></div></div>
@@ -90,9 +90,13 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,sans-serif;background
 <div class="meta" id="meta"></div>
 <div id="res"></div>
 <div class="pagination" id="pagination"></div>
-<div class="saved"><h3>Сохранённые проекты</h3><div id="savedList"></div></div>
+<div style="display:none" id="savedList"></div>
 </div>
-</div></div>
+</div>
+<div class="container" id="favorites"><h2>⭐ Избранное</h2>
+<p class="meta" id="favCount"></p>
+<div id="savedListFull"></div>
+</div>
 <div class="footer">
 📍 Москва, ул. Верхняя, д. 20, стр. 3, ЖК «Суббота»<br>
 🌐 <a href="https://leaders-is.ru/" target="_blank" style="color:#6d7cff">leaders-is.ru</a><br>
@@ -337,7 +341,7 @@ function popular(){page=1;let sorted=[...projects].sort((a,b)=>(likes[b.title]||
 function like(title){likes[title]=(likes[title]||0)+1;localStorage.setItem("likes",JSON.stringify(likes));render(current)}
 function saveItem(i){if(!saved.find(p=>p.title===current[i].title)){saved.push(current[i]);localStorage.setItem("saved",JSON.stringify(saved));loadSaved()}}
 function removeSaved(i){saved.splice(i,1);localStorage.setItem("saved",JSON.stringify(saved));loadSaved()}
-function loadSaved(){let div=document.getElementById("savedList");div.innerHTML="";if(saved.length===0){div.innerHTML="<p>Нет сохранённых проектов</p>"}else{saved.forEach((p,i)=>{let el=document.createElement("div");el.className="card";let tags=p.tags.split(" ");let tagsHTML=tags.map(t=>{if(!tagColors[t])tagColors[t]=['#ff6b6b','#4ecdc4','#ffe66d','#a29bfe','#fd79ab','#00cec9','#fab1a0','#95e1d3'][Math.floor(Math.random()*8)];return`<span class='tag' style='background:${tagColors[t]}'>${t}</span>`}).join("");let levelColor=p.level==='easy'?'#4ecdc4':p.level==='medium'?'#ffe66d':'#ff6b6b';let levelIcon=p.level==='easy'?'⭐':p.level==='medium'?'⭐⭐':'⭐⭐⭐';el.innerHTML="<div style='display:flex;justify-content:space-between;align-items:start'><div style='flex:1'><h3>"+p.title+" 🚀</h3><div class='tag-cloud'>"+tagsHTML+"</div><p style='margin-top:10px'>📝 "+p.desc+"</p><p>🎯 <b>Цель:</b> "+p.goal+"</p><p>📋 <b>Этапы:</b> "+p.steps+"</p><p style='color:"+levelColor+";font-weight:bold'>"+levelIcon+" "+p.level.toUpperCase()+"</p></div><div style='margin-left:15px'><button class='btn' onclick='exportOne("+i+")'>📥 PDF</button><br><br><button class='btn' onclick='removeSaved("+i+")'>🗑️</button></div></div>";div.appendChild(el)})}}
+function loadSaved(){let div=document.getElementById("savedList");let divFull=document.getElementById("savedListFull");let count=saved.length;document.getElementById("favCount").innerText=count>0?`Сохранено проектов: ${count}`:"Нет сохранённых проектов";const renderCard=(p,i)=>{let el=document.createElement("div");el.className="card";let tags=p.tags.split(" ");let tagsHTML=tags.map(t=>{if(!tagColors[t])tagColors[t]=['#ff6b6b','#4ecdc4','#ffe66d','#a29bfe','#fd79ab','#00cec9','#fab1a0','#95e1d3'][Math.floor(Math.random()*8)];return`<span class='tag' style='background:${tagColors[t]}'>${t}</span>`}).join("");let levelColor=p.level==='easy'?'#4ecdc4':p.level==='medium'?'#ffe66d':'#ff6b6b';let levelIcon=p.level==='easy'?'⭐':p.level==='medium'?'⭐⭐':'⭐⭐⭐';el.innerHTML="<div style='display:flex;justify-content:space-between;align-items:start'><div style='flex:1'><h3>"+p.title+" 🚀</h3><div class='tag-cloud'>"+tagsHTML+"</div><p style='margin-top:10px'>📝 "+p.desc+"</p><p>🎯 <b>Цель:</b> "+p.goal+"</p><p>📋 <b>Этапы:</b> "+p.steps+"</p><p style='color:"+levelColor+";font-weight:bold'>"+levelIcon+" "+p.level.toUpperCase()+"</p></div><div style='margin-left:15px'><button class='btn' onclick='exportOne("+i+")'>📥 PDF</button><br><br><button class='btn' onclick='removeSaved("+i+")'>🗑️</button></div></div>";return el};if(saved.length===0){div.innerHTML=divFull.innerHTML="<p>Нет сохранённых проектов</p>"}else{saved.forEach((p,i)=>{div.appendChild(renderCard(p,i));divFull.appendChild(renderCard(p,i))})}}}
 function exportOne(i){let p=saved[i];let content=p.title+"\nКатегория: "+p.tags+"\nСложность: "+p.level+"\n\nОписание: "+p.desc+"\n\nЦель: "+p.goal+"\n\nЭтапы: "+p.steps;const blob=new Blob([content],{type:"text/plain;charset=utf-8"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=p.title.replace(/[^a-zA-Zа-яА-Я0-9]/g,"_")+".txt";a.click();}
 function toggleTheme(){let d=document.documentElement;if(d.getAttribute("data-theme")==="light"){d.setAttribute("data-theme","dark");document.querySelector(".theme-btn").innerText="☀️"}else{d.setAttribute("data-theme","light");document.querySelector(".theme-btn").innerText="🌙"}}
 loadSaved();render(projects);
