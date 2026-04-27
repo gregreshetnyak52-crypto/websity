@@ -9,7 +9,7 @@
 :root{--c1:#ff6b6b;--c2:#4ecdc4;--c3:#ffe66d;--c4:#95e1d3;--c5:#a29bfe;--c6:#fd79ab;--c7:#fab1a0;--c8:#00cec9}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460);color:var(--text)}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460);color:var(--text);display:flex;flex-direction:column;min-height:100vh}
 .header{position:sticky;top:0;z-index:100;display:flex;justify-content:space-between;padding:15px 8%;background:rgba(0,0,0,0.7);backdrop-filter:blur(10px)}
 .nav a{margin-left:15px;color:#cbd5ff;text-decoration:none}
 .nav a:hover{color:var(--c3)}
@@ -46,7 +46,8 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,sans-serif;background
 .saved h3{color:var(--c3)}
 .tag{padding:5px 12px;background:linear-gradient(135deg,var(--c5),var(--c6));border-radius:12px;font-size:11px;color:white;margin-right:6px}
 .tag-cloud{margin:10px 0}
-.footer{padding:30px 8%;background:#020617;margin-top:50px;text-align:center;color:var(--muted)}
+.footer{padding:30px 0;background:#020617;margin-top:auto;text-align:center;color:var(--muted);width:100%}
+.footer-content{padding:0 8%}
 .pamjatka-section{margin-top:40px}
 .pamjatka-section .card{margin-top:25px;border-left:4px solid var(--c2)}
 @media(max-width:768px){.grid{grid-template-columns:1fr}.header{flex-direction:column;gap:10px}.container{padding:20px 5%}.hero{height:50vh}.hero h1{font-size:2em}}
@@ -96,10 +97,12 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,sans-serif;background
 <div id="savedListFull"></div>
 </div>
 <div class="footer">
+<div class="footer-content">
 📍 Москва, ул. Верхняя, д. 20, стр. 3, ЖК «Суббота»<br>
 🌐 <a href="https://leaders-is.ru/" target="_blank" style="color:#6d7cff">leaders-is.ru</a><br>
 <hr style="margin:20px 0;border:none;border-top:1px solid #333">
 Project Finder © 2026
+</div>
 </div>
 <script>
 const CATS = ["искусственный интеллект", "роботы", "виртуальная реальность", "Умные устройства", "финтех", "кибербезопасность", "образование", "здоровье", "климат", "блокчейн", "маркетинг", "дизайн", "спорт", "бизнес", "программирование", "экология", "музыка", "искусство", "география", "история", "литература", "физика", "математика", "биология", "химия", "астрономия", "психология", "социология", "право", "экономика", "политика", "медиа", "гастрономия", "мода", "архитектура", "фотография", "кино", "театр"];
