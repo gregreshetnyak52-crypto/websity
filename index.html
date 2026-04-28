@@ -102,10 +102,14 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,sans-serif;background
 📍 Москва, ул. Верхняя, д. 20, стр. 3, ЖК «Суббота»<br>
 🌐 <a href="https://leaders-is.ru/" target="_blank" style="color:#6d7cff">leaders-is.ru</a><br>
 <hr style="margin:20px 0;border:none;border-top:1px solid #333">
-Project Finder © 2026
+Project Finder © 2026<br>
+<a href="mobile.html" style="color:#6d7cff;font-size:0.9em">📱 Мобильная версия</a>
 </div>
 </div>
 <script>
+if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+    window.location.href = 'mobile.html';
+}
 const CATS = ["искусственный интеллект", "роботы", "виртуальная реальность", "Умные устройства", "финтех", "кибербезопасность", "образование", "здоровье", "климат", "блокчейн", "маркетинг", "дизайн", "спорт", "бизнес", "программирование", "экология", "музыка", "искусство", "география", "история", "литература", "физика", "математика", "биология", "химия", "астрономия", "психология", "социология", "право", "экономика", "политика", "медиа", "гастрономия", "мода", "архитектура", "фотография", "кино", "театр"];
 
 let projects = [];
