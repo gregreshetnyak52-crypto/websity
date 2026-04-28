@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Finder PRO - Мобильная версия</title>
+<style>
+:root{--bg:#0b1220;--panel:#0f172a;--card:#111a2e;--muted:#8ea0c7;--text:#e6ecff;--accent:#6d7cff}
+:root{--c1:#ff6b6b;--c2:#4ecdc4;--c3:#ffe66d;--c4:#95e1d3;--c5:#a29bfe;--c6:#fd79ab;--c7:#fab1a0;--c8:#00cec9}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460);color:var(--text);min-height:100vh;padding-bottom:80px}
+.header{position:sticky;top:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:12px 5%;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px)}
+.header div{font-size:1.1em;font-weight:bold}
+.nav{display:none;position:absolute;top:60px;left:0;right:0;background:rgba(15,23,42,0.98);padding:20px 5%;flex-direction:column;gap:15px}
+.nav.active{display:flex}
+.menu-btn{background:none;border:none;color:var(--text);font-size:1.5em;cursor:pointer}
+.nav a{color:#cbd5ff;text-decoration:none;font-size:1.1em;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.1)}
+.nav a:hover{color:var(--c3)}
+.hero{height:50vh;display:flex;align-items:center;justify-content:center;text-align:center;background:linear-gradient(135deg,#667eea,#764ba2);position:relative;overflow:hidden;padding:0 5%}
+.hero::before{content:'';position:absolute;width:200%;height:200%;background:radial-gradient(circle,rgba(255,255,255,0.1) 1px,transparent 1px);background-size:30px 30px;animation:move 20s linear infinite}
+@keyframes move{0%{transform:translate(0,0)}100%{transform:translate(-50%,-50%)}}
+.hero h1{font-size:2em;margin:0 0 10px;text-shadow:3px 3px 0 var(--c1)}
+.hero p{font-size:1em;color:#ffe}
+.container{padding:20px 5%;max-width:100%}
+.container h2{font-size:1.6em;margin-bottom:20px;background:linear-gradient(90deg,var(--c1),var(--c2),var(--c3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.teacher{display:flex;flex-direction:column;gap:20px;align-items:center;text-align:center}
+.teacher img{width:180px;border-radius:16px;border:4px solid var(--c2)}
+.btn{background:linear-gradient(135deg,var(--c1),var(--c6));border:none;padding:14px 20px;color:white;border-radius:25px;margin:5px;cursor:pointer;font-size:16px;font-weight:bold;transition:all 0.3s;box-shadow:0 4px 15px rgba(255,107,107,0.3);min-height:44px}
+.btn:hover{transform:translateY(-2px)}
+.btn:active{transform:scale(0.95)}
+.card{background:var(--card);padding:18px;border-radius:16px;margin-top:15px;border:2px solid transparent;transition:all 0.3s;box-shadow:0 4px 15px rgba(0,0,0,0.2)}
+.card:hover{border-color:var(--c2)}
+.card h3{font-size:1.2em;margin:0 0 12px;background:linear-gradient(90deg,var(--c2),var(--c1));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.card p{line-height:1.6;margin:10px 0;font-size:0.95em}
+.card ul{margin:10px 0 10px 20px}
+.card li{margin:6px 0;font-size:0.95em}
+.meta{color:var(--muted);margin-bottom:15px;font-size:0.9em}
+.pagination{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px;justify-content:center}
+.page-btn{padding:12px 18px;border:none;border-radius:10px;background:var(--panel);color:var(--text);cursor:pointer;font-weight:bold;font-size:16px;min-width:44px;min-height:44px}
+.page-btn:hover{background:var(--c5)}
+.page-btn.active{background:linear-gradient(135deg,var(--c5),var(--c6));transform:scale(1.1)}
+.saved{background:var(--panel);padding:18px;border-radius:16px;margin-top:20px;border:2px dashed var(--c3)}
+.saved h3{color:var(--c3)}
+.tag{padding:6px 14px;background:linear-gradient(135deg,var(--c5),var(--c6));border-radius:12px;font-size:12px;color:white;margin:4px;display:inline-block}
+.tag-cloud{margin:10px 0}
+.filters{background:var(--panel);padding:15px;border-radius:16px;margin-bottom:20px;border:2px solid var(--c5)}
+.filters select,.filters input{width:100%;padding:12px;margin-top:10px;border-radius:8px;border:none;background:var(--card);color:var(--text);font-size:16px}
+.chip-wrap{display:flex;overflow-x:auto;gap:8px;padding:10px 0;margin-top:10px;-webkit-overflow-scrolling:touch}
+.chip{flex-shrink:0;padding:10px 16px;background:var(--card);border-radius:20px;cursor:pointer;font-size:14px;border:2px solid transparent;white-space:nowrap}
+.chip:hover{border-color:var(--c2)}
+.chip.active{background:linear-gradient(135deg,var(--c2),var(--c8));border-color:var(--c3)}
+.btn-group{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.footer{padding:30px 5%;background:#020617;margin-top:40px;text-align:center;color:var(--muted);position:fixed;bottom:0;left:0;right:0;z-index:50}
+.footer-content{padding:0}
+.footer a{color:#6d7cff}
+.section{margin-bottom:30px}
+</style>
+</head>
+<body>
+
+<div class="header">
+<div style="font-size:1.1em;font-weight:bold">Project Finder PRO</div>
+<button class="menu-btn" onclick="toggleMenu()">☰</button>
+<div class="nav" id="nav">
+<a href="#home" onclick="toggleMenu()">Главная</a>
+<a href="#teacher" onclick="toggleMenu()">Руководитель</a>
+<a href="#pamjatka" onclick="toggleMenu()">Памятка</a>
+<a href="#projects" onclick="toggleMenu()">Проекты</a>
+<a href="#favorites" onclick="toggleMenu()">Избранное</a>
+</div>
+</div>
+
+<div class="hero" id="home">
+<div>
+<h1>Найди идею проекта</h1>
+<p>Полноценный продукт без ИИ</p>
+<a href="#projects"><button class="btn" style="font-size:16px;padding:14px 28px;margin-top:10px">Начать</button></a>
+</div>
+</div>
+
+<div class="container" id="teacher">
+<h2>Руководитель</h2>
+<div class="teacher">
+<img src="teacher.png">
+<div>
+<p style="font-size:1.2em"><b>👩‍🏫 Болдурчиди Е.М.</b></p>
+<p>Руководитель научной деятельности</p>
+<p>Помогает ученикам создавать и защищать проекты.</p>
+</div>
+</div>
+</div>
+
+<div class="container" id="pamjatka">
+<h2>Памятка</h2>
+
+<div class="card">
+<h3>1-4 класс</h3>
+<p>Учитывать возрастные особенности детей младшего школьного возраста.</p>
+<ul>
+<li>Темы из содержания учебных предметов</li>
+<li>Проблема в области познавательных интересов</li>
+<li>Длительность — 3-4 недели</li>
+<li>Текстовый файл не обязателен!</li>
+</ul>
+</div>
+
+<div class="card">
+<h3>5-7 класс</h3>
+<p>Групповые формы работы. Темы из любой области. Результат должен быть социально значимым.</p>
+</div>
+
+<div class="card">
+<h3>8-10 класс</h3>
+<p>Формирование компетентности. Индивидуальные формы работы.</p>
+</div>
+
+<div class="card">
+<h3>Схема проекта</h3>
+<p><b>1. Поиск проблемы</b> — Постановка проблемы.</p>
+<p><b>2. Тематизация</b> — Суть проекта.</p>
+<p><b>3. Цель</b> — Краткая формулировка.</p>
+<p><b>4. Планирование</b> — Мини-план.</p>
+<p><b>5. Задачи</b> — Как достичь цели.</p>
+<p><b>6. Теория</b> — Работа с информацией.</p>
+<p><b>7. Практика</b> — Предложение решения.</p>
+<p><b>8. Заключение</b> — Анализ данных.</p>
+</div>
+
+<div class="card">
+<h3>Виды проекта</h3>
+<p><b>1. Исследовательский</b> — Гипотеза, эксперимент, анализ.</p>
+<p><b>2. Творческий</b> — Свободный подход.</p>
+<p><b>3. Социо-гуманитарный</b> — Социальные проблемы.</p>
+<p><b>4. Инженерный</b> — Практический результат.</p>
+</div>
+
+<div class="card">
+<h3>Площадки для поиска</h3>
+<ul>
+<li><b>Проектория</b> — отечественные компании</li>
+<li><b>Globallab</b> — для исследователей</li>
+<li><b>Школа реальных дел</b> — кейсы</li>
+<li><b>Школа IT-решений</b> — IT-кейсы</li>
+</ul>
+</div>
+
+<div class="card">
+<h3>Оформление проекта</h3>
+<p><b>Титульный лист:</b> Учебное заведение, тема, ФИО, город, год.</p>
+<p><b>Введение:</b> Проблема, актуальность, цель, задачи.</p>
+<p><b>Теория:</b> 7-10 стр.</p>
+<p><b>Практика:</b> 4-15 стр (в зависимости от класса).</p>
+<p><b>Заключение:</b> Вывод результатов.</p>
+<p style="color:var(--accent)"><b>Важно! 10 класс — антиплагиат >60%.</b></p>
+</div>
+
+<div class="card">
+<h3>Оформление текста</h3>
+<ul>
+<li>Word, А4, Times New Roman 14pt</li>
+<li>Поля: 30/20/15/20 мм</li>
+<li>Интервал: полуторный</li>
+<li>Нумерация: сквозная</li>
+</ul>
+</div>
+
+<div class="card">
+<h3>Презентация</h3>
+<ul>
+<li>Минимум текста</li>
+<li>Текст — не визуальное средство</li>
+<li>Не перегружать слайды</li>
+</ul>
+<p style="margin-top:15px"><a href="https://docs.google.com/presentation/d/1-_SSuNtrwtoXGVY3aVeDvfeaYmkCpxAO/edit?usp=drive_link&ouid=116324512383519059211&rtpof=true&sd=true" target="_blank" style="color:#6d7cff;font-weight:bold">📥 Шаблон презентации</a></p>
+</div>
+
+<div class="card">
+<h3>📊 Критерии оценивания</h3>
+<ul>
+<li><b>Актуальность</b> — важность темы</li>
+<li><b>Цель и задачи</b> — чёткость</li>
+<li><b>Теория</b> — глубина исследования</li>
+<li><b>Практика</b> — результаты</li>
+<li><b>Оформление</b> — стандарты</li>
+<li><b>Защита</b> — презентация</li>
+</ul>
+<p style="margin-top:15px"><a href="https://drive.google.com/file/d/1ExFdT4eL9JNuPWYbSA-5hFKuYLj3pl_X/view?usp=drive_link" target="_blank" style="color:#6d7cff;font-weight:bold">📥 Критерии оценивания</a></p>
+</div>
+
+<div class="card">
+<h3>📁 Пример проекта</h3>
+<p>Ознакомьтесь с примером:</p>
+<p style="margin-top:15px"><a href="https://disk.yandex.ru/i/GyXFaEq3DL-TWA" target="_blank" style="color:#6d7cff;font-weight:bold">📥 Скачать пример проекта</a></p>
+</div>
+
+</div>
+
+<div class="container" id="projects">
+<h2>База проектов</h2>
+
+<div class="filters">
+<div style="font-weight:bold;margin-bottom:10px">Фильтры</div>
+<select id="level" onchange="applySearch()">
+<option value="">Любая сложность</option>
+<option value="easy">Лёгкий</option>
+<option value="medium">Средний</option>
+<option value="hard">Сложный</option>
+</select>
+<input id="input" placeholder="Поиск проектов..." style="margin-top:10px" oninput="applySearch()">
+<div class="chip-wrap" id="chips"></div>
+<div class="btn-group">
+<button class="btn" onclick="applySearch()">Найти</button>
+<button class="btn" onclick="random()">Случайные</button>
+<button class="btn" onclick="popular()">Популярные</button>
+<select id="sort" onchange="applySearch()" style="padding:12px;border-radius:8px;border:none;background:var(--card);color:var(--text);font-size:16px">
+<option value="default">По умолчанию</option>
+<option value="likes">По лайкам</option>
+<option value="title">По названию</option>
+</select>
+</div>
+</div>
+
+<div class="meta" id="meta"></div>
+<div id="res"></div>
+<div class="pagination" id="pagination"></div>
+</div>
+
+<div class="container" id="favorites">
+<h2>⭐ Избранное</h2>
+<p class="meta" id="favCount"></p>
+<div id="savedListFull"></div>
+</div>
+
+<div class="footer">
+<div class="footer-content">
+📍 Москва, ул. Верхняя, д. 20, стр. 3<br>
+🌐 <a href="https://leaders-is.ru/" target="_blank">leaders-is.ru</a><br>
+<hr style="margin:15px 0;border:none;border-top:1px solid #333">
+Project Finder © 2026<br>
+<a href="index.html" style="color:#6d7cff;font-size:0.9em">💻 ПК версия</a>
+</div>
+</div>
+
+<script>
+const CATS = ["искусственный интеллект", "роботы", "виртуальная реальность", "Умные устройства", "финтех", "кибербезопасность", "образование", "здоровье", "климат", "блокчейн", "маркетинг", "дизайн", "спорт", "бизнес", "программирование", "экология", "музыка", "искусство", "география", "история", "литература", "физика", "математика", "биология", "химия", "астрономия", "психология", "социология", "право", "экономика", "политика", "медиа", "гастрономия", "мода", "архитектура", "фотография", "кино", "театр"];
+
+let projects = [];
+let activeCategory = "";
+let likes = {};
+let saved = [];
+let current = [];
+let page = 1;
+const perPage = 5;
+let tagColors = {};
+let favPage = 1;
+
+async function loadProjects() {
+  try {
+    const response = await fetch('projects.json');
+    if (!response.ok) throw new Error('HTTP error');
+    projects = await response.json();
+  } catch (e) {
+    console.error('Ошибка загрузки projects.json:', e);
+    projects = [
+      {title: "Создание сайта-визитки", tags: "программирование образование", level: "easy", desc: "Разработка сайта-визитки для школы", goal: "Освоить базовую вёрстку", steps: "HTML/CSS → макет → код → хостинг"}
+    ];
+  }
+  initChips();
+  render(projects);
+  loadSaved();
+}
+
+function toggleMenu() {
+  document.getElementById('nav').classList.toggle('active');
+}
+
+function initChips() {
+  const chipWrap = document.getElementById("chips");
+  chipWrap.innerHTML = "";
+  CATS.forEach(t => {
+    let c = document.createElement("div");
+    c.className = "chip";
+    c.innerText = t;
+    c.onclick = () => {
+      activeCategory = t;
+      document.querySelectorAll(".chip").forEach(x => x.classList.remove("active"));
+      c.classList.add("active");
+      applySearch();
+    };
+    chipWrap.appendChild(c);
+  });
+}
+
+function render(list) {
+  if (!list || list.length === 0) {
+    document.getElementById("res").innerHTML = "<p>Нет проектов</p>";
+    return;
+  }
+  current = list;
+  let start = (page - 1) * perPage;
+  let paginated = list.slice(start, start + perPage);
+  document.getElementById("meta").innerText = list.length + " проектов | стр. " + page;
+  const res = document.getElementById("res");
+  res.innerHTML = "";
+  paginated.forEach((p, i) => {
+    let div = document.createElement("div");
+    div.className = "card";
+    let tags = p.tags.split(" ");
+    let tagsHTML = tags.map(t => {
+      if (!tagColors[t]) tagColors[t] = ["#ff6b6b", "#4ecdc4", "#ffe66d", "#a29bfe", "#fd79ab", "#00cec9", "#fab1a0", "#95e1d3"][Math.floor(Math.random() * 8)];
+      return `<span class="tag" style="background:${tagColors[t]}">${t}</span>`;
+    }).join("");
+    let levelColor = p.level === "easy" ? "#4ecdc4" : p.level === "medium" ? "#ffe66d" : "#ff6b6b";
+    let levelIcon = p.level === "easy" ? "⭐" : p.level === "medium" ? "⭐⭐" : "⭐⭐⭐";
+    div.innerHTML = "<h3>" + p.title + " 🚀</h3><div class='tag-cloud'>" + tagsHTML + "</div><p style='margin-top:12px'>📝 " + p.desc + "</p><p>🎯 <b>Цель:</b> " + p.goal + "</p><p>📋 <b>Этапы:</b> " + p.steps + "</p><p style='color:" + levelColor + ";font-weight:bold'>" + levelIcon + " " + p.level.toUpperCase() + "</p><button class='btn' style='margin-right:5px;margin-top:10px' onclick='like(\"" + p.title + "\")'>❤️ " + (likes[p.title] || 0) + "</button><button class='btn' style='margin-top:10px' onclick='saveItem(" + (start + i) + ")'>💾 Сохранить</button>";
+    res.appendChild(div);
+  });
+  renderPagination(list.length);
+}
+
+function renderPagination(total) {
+  const pages = Math.ceil(total / perPage);
+  const wrap = document.getElementById("pagination");
+  wrap.innerHTML = "";
+  for (let i = 1; i <= pages; i++) {
+    let btn = document.createElement("button");
+    btn.className = "page-btn" + (i === page ? " active" : "");
+    btn.innerText = i;
+    btn.onclick = () => { page = i; render(current); window.scrollTo(0, document.getElementById("projects").offsetTop); };
+    wrap.appendChild(btn);
+  }
+}
+
+function applySearch() {
+  page = 1;
+  let val = document.getElementById("input").value.toLowerCase();
+  let level = document.getElementById("level").value;
+  let sort = document.getElementById("sort").value;
+  let list = projects.filter(p => (p.tags.includes(val) || p.title.toLowerCase().includes(val) || val === "") && (level === "" || p.level === level) && (activeCategory === "" || p.tags.includes(activeCategory)));
+  if (sort === "likes") list.sort((a, b) => (likes[b.title] || 0) - (likes[a.title] || 0));
+  if (sort === "title") list.sort((a, b) => a.title.localeCompare(b.title));
+  render(list);
+}
+
+function random() {
+  page = 1;
+  let shuffled = [...projects].sort(() => 0.5 - Math.random());
+  render(shuffled);
+}
+
+function popular() {
+  page = 1;
+  let sorted = [...projects].sort((a, b) => (likes[b.title] || 0) - (likes[a.title] || 0));
+  render(sorted);
+}
+
+function like(title) {
+  likes[title] = (likes[title] || 0) + 1;
+  render(current);
+}
+
+function saveItem(i) {
+  if (!saved.find(p => p.title === current[i].title)) {
+    saved.push(current[i]);
+    loadSaved();
+  }
+}
+
+function removeSaved(i) {
+  saved.splice(i, 1);
+  loadSaved();
+}
+
+function loadSaved() {
+  let divFull = document.getElementById("savedListFull");
+  let count = saved.length;
+  document.getElementById("favCount").innerText = count > 0 ? "Сохранено: " + count + " | стр. " + favPage : "Нет сохранённых проектов";
+  if (saved.length === 0) {
+    divFull.innerHTML = "<p>Нет сохранённых проектов</p>";
+  } else {
+    divFull.innerHTML = "";
+    let start = (favPage - 1) * perPage;
+    let pageItems = saved.slice(start, start + perPage);
+    pageItems.forEach((p, i) => {
+      let el = document.createElement("div");
+      el.className = "card";
+      let tags = p.tags.split(" ");
+      let tagsHTML = tags.map(t => {
+        if (!tagColors[t]) tagColors[t] = ["#ff6b6b", "#4ecdc4", "#ffe66d", "#a29bfe", "#fd79ab", "#00cec9", "#fab1a0", "#95e1d3"][Math.floor(Math.random() * 8)];
+        return `<span class="tag" style="background:${tagColors[t]}">${t}</span>`;
+      }).join("");
+      let levelColor = p.level === "easy" ? "#4ecdc4" : p.level === "medium" ? "#ffe66d" : "#ff6b6b";
+      let levelIcon = p.level === "easy" ? "⭐" : p.level === "medium" ? "⭐⭐" : "⭐⭐⭐";
+      el.innerHTML = "<h3>" + p.title + " 🚀</h3><div class='tag-cloud'>" + tagsHTML + "</div><p style='margin-top:10px'>📝 " + p.desc + "</p><p>🎯 <b>Цель:</b> " + p.goal + "</p><p>📋 <b>Этапы:</b> " + p.steps + "</p><p style='color:" + levelColor + ";font-weight:bold'>" + levelIcon + " " + p.level.toUpperCase() + "</p><button class='btn' style='margin-top:10px' onclick='exportOne(" + (start + i) + ")'>📥 PDF</button><button class='btn' style='margin-top:10px' onclick='removeSaved(" + (start + i) + ")'>🗑️</button>";
+      divFull.appendChild(el);
+    });
+    let pages = Math.ceil(saved.length / perPage);
+    let paginationHTML = "";
+    for (let i = 1; i <= pages; i++) {
+      paginationHTML += `<button class="page-btn ${i === favPage ? 'active' : ''}" onclick="goToFavPage(${i})">${i}</button>`;
+    }
+    divFull.innerHTML += "<div class='pagination'>" + paginationHTML + "</div>";
+  }
+}
+
+function goToFavPage(i) {
+  favPage = i;
+  loadSaved();
+  window.scrollTo(0, document.getElementById("favorites").offsetTop);
+}
+
+function exportOne(i) {
+  let p = saved[i];
+  let content = p.title + "\nКатегория: " + p.tags + "\nСложность: " + p.level + "\n\nОписание: " + p.desc + "\n\nЦель: " + p.goal + "\n\nЭтапы: " + p.steps;
+  const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = p.title.replace(/[^a-zA-Zа-яА-Я0-9]/g, "_") + ".txt";
+  a.click();
+}
+
+document.addEventListener('DOMContentLoaded', loadProjects);
+</script>
+
+</body>
+</html>
