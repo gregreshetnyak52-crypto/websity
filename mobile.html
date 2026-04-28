@@ -51,7 +51,7 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,sans-serif;background
 .chip:hover{border-color:var(--c2)}
 .chip.active{background:linear-gradient(135deg,var(--c2),var(--c8));border-color:var(--c3)}
 .btn-group{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
-.footer{padding:30px 5%;background:#020617;margin-top:40px;text-align:center;color:var(--muted);position:fixed;bottom:0;left:0;right:0;z-index:50}
+.footer{padding:30px 5%;background:#020617;margin-top:40px;text-align:center;color:var(--muted)}
 .footer-content{padding:0}
 .footer a{color:#6d7cff}
 .section{margin-bottom:30px}
@@ -237,8 +237,7 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,sans-serif;background
 📍 Москва, ул. Верхняя, д. 20, стр. 3<br>
 🌐 <a href="https://leaders-is.ru/" target="_blank">leaders-is.ru</a><br>
 <hr style="margin:15px 0;border:none;border-top:1px solid #333">
-Project Finder © 2026<br>
-<a href="index.html" style="color:#6d7cff;font-size:0.9em">💻 ПК версия</a>
+Project Finder © 2026
 </div>
 </div>
 
@@ -313,7 +312,20 @@ function render(list) {
     }).join("");
     let levelColor = p.level === "easy" ? "#4ecdc4" : p.level === "medium" ? "#ffe66d" : "#ff6b6b";
     let levelIcon = p.level === "easy" ? "⭐" : p.level === "medium" ? "⭐⭐" : "⭐⭐⭐";
-    div.innerHTML = "<h3>" + p.title + " 🚀</h3><div class='tag-cloud'>" + tagsHTML + "</div><p style='margin-top:12px'>📝 " + p.desc + "</p><p>🎯 <b>Цель:</b> " + p.goal + "</p><p>📋 <b>Этапы:</b> " + p.steps + "</p><p style='color:" + levelColor + ";font-weight:bold'>" + levelIcon + " " + p.level.toUpperCase() + "</p><button class='btn' style='margin-right:5px;margin-top:10px' onclick='like(\"" + p.title + "\")'>❤️ " + (likes[p.title] || 0) + "</button><button class='btn' style='margin-top:10px' onclick='saveItem(" + (start + i) + ")'>💾 Сохранить</button>";
+    div.innerHTML = "<h3>" + p.title + " 🚀</h3><div class='tag-cloud'>" + tagsHTML + "</div><p style='margin-top:12px'>📝 " + p.desc + "</p><p>🎯 <b>Цель:</b> " + p.goal + "</p><p>📋 <b>Этапы:</b> " + p.steps + "</p><p style='color:" + levelColor + ";font-weight:bold'>" + levelIcon + " " + p.level.toUpperCase() + "</p>";
+    let likeBtn = document.createElement("button");
+    likeBtn.className = "btn";
+    likeBtn.style.marginRight = "5px";
+    likeBtn.style.marginTop = "10px";
+    likeBtn.innerHTML = "❤️ " + (likes[p.title] || 0);
+    likeBtn.onclick = () => like(p.title);
+    let saveBtn = document.createElement("button");
+    saveBtn.className = "btn";
+    saveBtn.style.marginTop = "10px";
+    saveBtn.innerHTML = "💾 Сохранить";
+    saveBtn.onclick = () => saveItem(start + i);
+    div.appendChild(likeBtn);
+    div.appendChild(saveBtn);
     res.appendChild(div);
   });
   renderPagination(list.length);
