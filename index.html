@@ -20,36 +20,79 @@
   --c6:#fd79ab;
   --c7:#fab1a0;
   --c8:#00cec9;
+  --line:rgba(255,255,255,0.08);
 }
 *{box-sizing:border-box}
+img{display:block;max-width:100%}
 html{scroll-behavior:smooth}
+section[id]{scroll-margin-top:104px}
 body{
   margin:0;
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460);
   color:var(--text);
-  display:flex;
-  flex-direction:column;
   min-height:100vh;
+  position:relative;
 }
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(circle at 14% 16%,rgba(78,205,196,0.12),transparent 30%),
+    radial-gradient(circle at 86% 18%,rgba(255,230,109,0.08),transparent 28%),
+    radial-gradient(circle at 74% 82%,rgba(162,155,254,0.12),transparent 32%);
+  pointer-events:none;
+  z-index:-1;
+}
+body.menu-open{overflow:hidden}
+a{color:inherit}
+button,
+input,
+select{font:inherit}
 .header{
   position:sticky;
   top:0;
   z-index:100;
+  padding:0 24px;
+  background:rgba(0,0,0,0.76);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+}
+.header-inner{
+  width:min(1200px,100% - 64px);
+  margin:0 auto;
+  min-height:72px;
   display:flex;
-  justify-content:space-between;
   align-items:center;
-  gap:20px;
-  padding:16px 8%;
-  background:rgba(0,0,0,0.74);
-  backdrop-filter:blur(12px);
+  gap:18px;
 }
 .brand{
   font-size:1.35rem;
   font-weight:800;
   letter-spacing:0.02em;
+  text-decoration:none;
+  white-space:nowrap;
+}
+.menu-toggle{
+  display:none;
+  align-items:center;
+  justify-content:center;
+  width:44px;
+  height:44px;
+  margin-left:auto;
+  border:none;
+  border-radius:12px;
+  background:rgba(255,255,255,0.08);
+  color:var(--text);
+  cursor:pointer;
+}
+.menu-toggle span{
+  font-size:1.4rem;
+  line-height:1;
 }
 .nav{
+  margin-left:auto;
   display:flex;
   flex-wrap:wrap;
   justify-content:flex-end;
@@ -59,15 +102,30 @@ body{
   color:#d9e2ff;
   text-decoration:none;
   font-size:0.98rem;
+  padding:6px 0;
+  position:relative;
+}
+.nav a::after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:-4px;
+  height:2px;
+  transform:scaleX(0);
+  transform-origin:center;
+  background:linear-gradient(90deg,var(--c2),var(--c3));
+  transition:transform 0.2s ease;
 }
 .nav a:hover{color:var(--c3)}
+.nav a:hover::after{transform:scaleX(1)}
 .hero{
-  min-height:70vh;
+  min-height:66vh;
   display:flex;
   align-items:center;
   justify-content:center;
   text-align:center;
-  padding:60px 8%;
+  padding:76px 8% 64px;
   background:linear-gradient(135deg,#667eea,#764ba2);
   position:relative;
   overflow:hidden;
@@ -76,7 +134,7 @@ body{
   content:"";
   position:absolute;
   inset:-50%;
-  background:radial-gradient(circle,rgba(255,255,255,0.1) 1px,transparent 1px);
+  background:radial-gradient(circle,rgba(255,255,255,0.12) 1px,transparent 1px);
   background-size:30px 30px;
   animation:move 20s linear infinite;
 }
@@ -87,23 +145,31 @@ body{
 .hero-inner{
   position:relative;
   z-index:1;
-  max-width:720px;
+  max-width:760px;
 }
 .hero h1{
   margin:0 0 16px;
-  font-size:clamp(2.6rem,5vw,4rem);
-  line-height:1.05;
+  font-size:clamp(2.6rem,5vw,4.2rem);
+  line-height:1.02;
   text-shadow:3px 3px 0 var(--c1);
 }
 .hero p{
-  margin:0 0 28px;
-  font-size:1.2rem;
-  color:#fff7e8;
+  margin:0 auto 28px;
+  max-width:620px;
+  font-size:1.14rem;
+  line-height:1.75;
+  color:#fff8ea;
+}
+.hero-actions{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:12px;
 }
 .container{
   width:min(1200px,100% - 64px);
   margin:0 auto;
-  padding:40px 0;
+  padding:56px 0;
 }
 .container h2{
   margin:0 0 16px;
@@ -114,17 +180,17 @@ body{
   background-clip:text;
 }
 .section-intro{
-  max-width:760px;
+  max-width:780px;
   margin:0 0 28px;
   color:#dae4ff;
-  line-height:1.65;
+  line-height:1.72;
 }
 .teacher{
   display:flex;
   gap:30px;
   flex-wrap:wrap;
   align-items:center;
-  background:rgba(15,23,42,0.78);
+  background:rgba(15,23,42,0.8);
   border:1px solid rgba(162,155,254,0.35);
   border-radius:24px;
   padding:28px;
@@ -144,59 +210,25 @@ body{
   font-size:1.45rem;
   font-weight:800;
 }
-.meta{
-  color:var(--muted);
-  margin-bottom:16px;
-}
-.grid{
-  display:grid;
-  grid-template-columns:300px minmax(0,1fr);
-  gap:24px;
-}
-.sidebar,
-.filters{
-  background:var(--panel);
-  padding:22px;
-  border-radius:20px;
-  border:2px solid rgba(162,155,254,0.6);
-  box-shadow:0 12px 28px rgba(0,0,0,0.24);
-}
-.sidebar-title{
-  font-weight:800;
-  margin-bottom:12px;
-}
-.sidebar select,
-.sidebar input{
-  width:100%;
-  padding:12px 14px;
-  margin-top:10px;
-  border-radius:10px;
-  border:none;
-  background:var(--card);
-  color:var(--text);
-  font-size:1rem;
-}
-.btn-row{
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-  margin-top:14px;
+.teacher-info p{
+  line-height:1.68;
 }
 .btn{
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  background:linear-gradient(135deg,var(--c1),var(--c6));
+  gap:8px;
   border:none;
-  padding:12px 18px;
-  color:#fff;
   border-radius:999px;
+  padding:13px 20px;
+  background:linear-gradient(135deg,var(--c1),var(--c6));
+  color:#fff;
   cursor:pointer;
   font-size:0.95rem;
   font-weight:800;
   text-decoration:none;
-  transition:transform 0.2s ease,box-shadow 0.2s ease,opacity 0.2s ease;
   box-shadow:0 10px 24px rgba(255,107,107,0.28);
+  transition:transform 0.2s ease,box-shadow 0.2s ease,opacity 0.2s ease;
 }
 .btn:hover{
   transform:translateY(-2px);
@@ -207,49 +239,115 @@ body{
   background:linear-gradient(135deg,var(--c5),var(--c8));
   box-shadow:0 10px 24px rgba(109,124,255,0.24);
 }
-.chip-list{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
+.btn.ghost{
+  background:rgba(255,255,255,0.12);
+  box-shadow:none;
+  border:1px solid rgba(255,255,255,0.18);
 }
-.chip{
+.accordion-list{
+  display:grid;
+  gap:18px;
+}
+.accordion{
+  background:rgba(15,23,42,0.76);
+  border:1px solid rgba(162,155,254,0.28);
+  border-radius:22px;
+  overflow:hidden;
+  box-shadow:0 12px 28px rgba(0,0,0,0.18);
+}
+.accordion[open]{
+  border-color:rgba(78,205,196,0.42);
+}
+.accordion summary{
+  list-style:none;
+  cursor:pointer;
+}
+.accordion summary::-webkit-details-marker{display:none}
+.accordion-summary{
+  display:flex;
+  align-items:center;
+  gap:18px;
+  padding:22px 24px;
+}
+.accordion-title-wrap{
+  flex:1 1 auto;
+  min-width:0;
+}
+.accordion-kicker{
+  display:block;
+  margin-bottom:6px;
+  color:#9db0ff;
+  font-size:0.78rem;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+}
+.accordion-title{
+  margin:0;
+  font-size:1.18rem;
+  line-height:1.35;
+}
+.accordion-lead{
+  margin:8px 0 0;
+  color:var(--muted);
+  line-height:1.6;
+}
+.accordion-count{
+  flex:0 0 auto;
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  padding:9px 14px;
-  background:var(--card);
-  color:var(--text);
+  min-width:92px;
+  padding:8px 12px;
   border-radius:999px;
-  border:none;
-  cursor:pointer;
-  font-size:0.9rem;
+  background:rgba(109,124,255,0.14);
+  color:#dce5ff;
+  font-size:0.84rem;
   font-weight:700;
-  border:2px solid transparent;
-  transition:border-color 0.2s ease,transform 0.2s ease,background 0.2s ease;
 }
-.chip:hover{
-  border-color:var(--c2);
-  transform:translateY(-1px);
+.accordion-caret{
+  flex:0 0 auto;
+  width:42px;
+  height:42px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:12px;
+  background:rgba(255,255,255,0.08);
+  color:#fff;
+  transition:transform 0.2s ease,background 0.2s ease;
 }
-.chip.active{
-  background:linear-gradient(135deg,var(--c2),var(--c8));
-  border-color:var(--c3);
+.accordion[open] .accordion-caret{
+  transform:rotate(45deg);
+  background:rgba(78,205,196,0.18);
 }
-.memo-grid{
+.accordion-panel{
+  padding:0 24px 24px;
+}
+.accordion-grid{
   display:grid;
   grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:22px;
+  gap:18px;
 }
 .memo-card,
 .card{
   background:var(--card);
   padding:22px;
   border-radius:20px;
-  border:1px solid rgba(78,205,196,0.2);
+  border:1px solid rgba(78,205,196,0.16);
   box-shadow:0 12px 28px rgba(0,0,0,0.22);
+  position:relative;
+  overflow:hidden;
+  height:100%;
 }
-.memo-card{
-  border-left:4px solid var(--c2);
+.memo-card::before,
+.card::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+  width:100%;
+  height:3px;
+  background:linear-gradient(90deg,var(--c2),var(--c5),transparent);
 }
 .memo-card.wide{
   grid-column:1 / -1;
@@ -257,7 +355,7 @@ body{
 .memo-card h3,
 .card h3{
   margin:0 0 14px;
-  font-size:1.28rem;
+  font-size:1.18rem;
   background:linear-gradient(90deg,var(--c2),var(--c1));
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
@@ -284,7 +382,6 @@ body{
   border-radius:14px;
   background:rgba(109,124,255,0.16);
   border:1px solid rgba(109,124,255,0.3);
-  color:#edf2ff;
 }
 .memo-link{
   display:inline-flex;
@@ -295,16 +392,116 @@ body{
   font-weight:700;
   text-decoration:none;
 }
-.memo-link:hover{color:#cbd6ff}
-.results-shell{
-  min-width:0;
+.memo-link:hover{color:#cfd9ff}
+.grid{
+  display:grid;
+  grid-template-columns:300px minmax(0,1fr);
+  gap:24px;
+  align-items:start;
 }
-.status-empty{
+.sidebar{
+  position:sticky;
+  top:92px;
+  background:var(--panel);
+  padding:22px;
+  border-radius:20px;
+  border:2px solid rgba(162,155,254,0.6);
+  box-shadow:0 12px 28px rgba(0,0,0,0.24);
+}
+.sidebar-title{
+  font-weight:800;
+  margin-bottom:12px;
+  letter-spacing:0.01em;
+}
+.control-label{
+  display:block;
+  margin-top:14px;
+  margin-bottom:6px;
+  color:#dfe6ff;
+  font-size:0.9rem;
+  font-weight:700;
+}
+.sidebar select,
+.sidebar input{
+  width:100%;
+  padding:12px 14px;
+  border-radius:10px;
+  border:none;
+  background:var(--card);
+  color:var(--text);
+}
+.hint{
+  margin:14px 0 0;
+  color:var(--muted);
+  line-height:1.6;
+  font-size:0.9rem;
+}
+.chip-list{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-bottom:4px;
+}
+.chip{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:9px 14px;
+  background:var(--card);
+  color:var(--text);
+  border-radius:999px;
+  border:2px solid transparent;
+  cursor:pointer;
+  font-size:0.9rem;
+  font-weight:700;
+  transition:border-color 0.2s ease,transform 0.2s ease,background 0.2s ease;
+}
+.chip:hover{
+  border-color:var(--c2);
+  transform:translateY(-1px);
+}
+.chip.active{
+  background:linear-gradient(135deg,var(--c2),var(--c8));
+  border-color:var(--c3);
+}
+.btn-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:16px;
+}
+.btn-row .btn{
+  flex:1 1 calc(50% - 5px);
+}
+.btn-row .btn:first-child{
+  flex-basis:100%;
+}
+.results-shell{min-width:0}
+.meta-badge,
+.saved-meta{
+  display:inline-flex;
+  align-items:center;
+  min-height:44px;
+  padding:0 14px;
+  border-radius:14px;
+  background:rgba(15,23,42,0.72);
+  border:1px solid var(--line);
+  color:var(--muted);
+  margin-bottom:16px;
+  line-height:1.5;
+}
+.status-empty,
+.loading-state{
   padding:20px;
   border-radius:18px;
-  background:rgba(15,23,42,0.7);
+  background:rgba(15,23,42,0.72);
   border:1px dashed rgba(255,230,109,0.45);
   color:#f6f0bc;
+}
+.loading-state{
+  border-style:solid;
+  border-color:rgba(109,124,255,0.25);
+  color:#dce5ff;
 }
 .tag-cloud{
   display:flex;
@@ -345,16 +542,11 @@ body{
 .page-btn.active{
   background:linear-gradient(135deg,var(--c5),var(--c6));
 }
-.saved-actions{
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-  margin-top:16px;
-}
 .footer{
-  margin-top:auto;
+  margin-top:64px;
   background:#020617;
   color:var(--muted);
+  border-top:1px solid var(--line);
 }
 .footer-content{
   width:min(1200px,100% - 64px);
@@ -362,115 +554,188 @@ body{
   padding:28px 0 34px;
   text-align:center;
   line-height:1.7;
+  display:grid;
+  gap:8px;
 }
 .footer-content hr{
   margin:18px 0;
   border:none;
   border-top:1px solid rgba(255,255,255,0.12);
 }
-.footer a{
-  color:#9db0ff;
-}
-@media (max-width: 960px){
-  .grid{grid-template-columns:1fr}
-  .memo-grid{grid-template-columns:1fr}
-  .memo-card.wide{grid-column:auto}
-  .header{
+.footer a{color:#9db0ff}
+@media (max-width: 980px){
+  .header{padding:0 16px}
+  .header-inner{
+    width:min(100%,1200px);
+    min-height:68px;
+  }
+  .menu-toggle{display:inline-flex}
+  .nav{
+    display:none;
+    position:absolute;
+    top:68px;
+    left:16px;
+    right:16px;
+    margin-left:0;
+    padding:16px;
+    background:rgba(15,23,42,0.98);
+    border:1px solid rgba(162,155,254,0.35);
+    border-radius:18px;
     flex-direction:column;
     align-items:flex-start;
+    gap:10px;
+    box-shadow:0 18px 36px rgba(0,0,0,0.34);
   }
+  .nav.open{display:flex}
+  .nav a{
+    width:100%;
+    padding:10px 0;
+  }
+  .nav a::after{display:none}
+  .grid{grid-template-columns:1fr}
+  .sidebar{position:static}
+}
+@media (max-width: 860px){
+  .accordion-grid{grid-template-columns:1fr}
+  .memo-card.wide{grid-column:auto}
 }
 @media (max-width: 768px){
+  section[id]{scroll-margin-top:88px}
   .container,
   .footer-content{
-    width:min(100% - 32px,1200px);
+    width:min(100% - 24px,1200px);
   }
   .hero{
     min-height:54vh;
-    padding:48px 16px;
+    padding:54px 16px 48px;
   }
+  .hero-actions .btn{
+    width:100%;
+  }
+  .accordion-summary{
+    padding:18px;
+    gap:12px;
+    align-items:flex-start;
+  }
+  .accordion-count{
+    min-width:auto;
+  }
+  .accordion-panel{
+    padding:0 18px 18px;
+  }
+  .memo-card,
+  .card{padding:18px}
   .teacher{
     padding:22px;
+    text-align:center;
+  }
+  .teacher img{
+    width:180px;
+  }
+  .btn-row .btn{
+    flex-basis:100%;
+  }
+  .footer{
+    margin-top:44px;
   }
 }
 </style>
 </head>
-<body data-view="desktop">
+<body>
 <header class="header">
-  <div class="brand">Project Finder PRO</div>
-  <nav class="nav">
-    <a href="#home">Главная</a>
-    <a href="#teacher">Руководитель</a>
-    <a href="#pamjatka">Памятка</a>
-    <a href="#projects">Проекты</a>
-    <a href="#favorites">Избранное</a>
-  </nav>
+  <div class="header-inner">
+    <a class="brand" href="#home">Project Finder PRO</a>
+    <button class="menu-toggle" id="menuToggle" type="button" aria-expanded="false" aria-controls="siteNav" aria-label="Открыть меню">
+      <span>☰</span>
+    </button>
+    <nav class="nav" id="siteNav">
+      <a href="#home">Главная</a>
+      <a href="#teacher">Руководитель</a>
+      <a href="#pamjatka">Памятка</a>
+      <a href="#projects">Проекты</a>
+      <a href="#favorites">Избранное</a>
+    </nav>
+  </div>
 </header>
 
-<section class="hero" id="home">
-  <div class="hero-inner">
-    <h1>Найди идею проекта</h1>
-    <p>Удобная база тем, требования к оформлению и памятка по проектной работе в одном месте.</p>
-    <a href="#projects" class="btn">Перейти к проектам</a>
-  </div>
-</section>
-
-<section class="container" id="teacher">
-  <h2>Руководитель научной деятельности</h2>
-  <div class="teacher">
-    <img src="teacher.png" alt="Евгения Михайловна">
-    <div class="teacher-info">
-      <p class="teacher-name">Болдурчиди Евгения Михайловна</p>
-      <p>Руководитель научной деятельности. Помогает ученикам собирать сильные темы, выстраивать структуру проекта и уверенно готовиться к защите.</p>
-      <p class="meta">Консультации, сопровождение проекта, поддержка на всех этапах работы.</p>
-    </div>
-  </div>
-</section>
-
-<section class="container" id="pamjatka">
-  <h2>Памятка для учеников</h2>
-  <p class="section-intro">Собрал на странице ключевые требования из памятки: что учитывать по классам, как выбрать формат проекта, как оформить текст и презентацию и где искать тему. Этот блок теперь рендерится из одного общего источника для десктопа и мобильной версии, чтобы содержание не расходилось.</p>
-  <div class="memo-grid" id="memoCards"></div>
-</section>
-
-<section class="container" id="projects">
-  <h2>База проектов</h2>
-  <div class="grid">
-    <aside class="sidebar">
-      <div class="sidebar-title">Категории и фильтры</div>
-      <div class="chip-list" id="chips"></div>
-      <select id="level">
-        <option value="">Любая сложность</option>
-        <option value="easy">Лёгкий</option>
-        <option value="medium">Средний</option>
-        <option value="hard">Сложный</option>
-      </select>
-      <input id="input" placeholder="Поиск по теме, описанию или этапам">
-      <select id="sort">
-        <option value="default">По умолчанию</option>
-        <option value="likes">По лайкам</option>
-        <option value="title">По названию</option>
-      </select>
-      <div class="btn-row">
-        <button class="btn" id="searchBtn" type="button">Найти</button>
-        <button class="btn secondary" id="randomBtn" type="button">Случайные</button>
-        <button class="btn secondary" id="popularBtn" type="button">Популярные</button>
+<main>
+  <section class="hero" id="home">
+    <div class="hero-inner">
+      <h1>Найди идею проекта</h1>
+      <p>Одна адаптивная страница для компьютера и телефона: требования к проектной работе, памятка по оформлению и удобный поиск тем без дублирования контента между версиями.</p>
+      <div class="hero-actions">
+        <a href="#projects" class="btn">Перейти к проектам</a>
+        <a href="#pamjatka" class="btn ghost">Открыть памятку</a>
       </div>
-    </aside>
-
-    <div class="results-shell">
-      <div class="meta" id="meta"></div>
-      <div id="res"></div>
-      <div class="pagination" id="pagination"></div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section class="container" id="favorites">
-  <h2>Избранное</h2>
-  <p class="meta" id="favCount"></p>
-  <div id="savedListFull"></div>
-</section>
+  <section class="container" id="teacher">
+    <h2>Руководитель научной деятельности</h2>
+    <div class="teacher">
+      <img src="teacher.png" alt="Евгения Михайловна">
+      <div class="teacher-info">
+        <p class="teacher-name">Болдурчиди Евгения Михайловна</p>
+        <p>Руководитель научной деятельности. Помогает ученикам подбирать сильные темы, выстраивать структуру работы, проверять оформление и уверенно готовиться к защите проекта.</p>
+        <p>Сайт теперь собирает в одном месте и практические требования, и базу проектных идей, чтобы ученик не прыгал между разными версиями страницы.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="container" id="pamjatka">
+    <h2>Памятка для учеников</h2>
+    <p class="section-intro">Памятку перевёл в раскрывающиеся секции: сначала видно только структуру разделов, а подробности открываются по необходимости. Так и на телефоне, и на компьютере большой объём информации читается заметно спокойнее.</p>
+    <div class="accordion-list" id="memoAccordion"></div>
+  </section>
+
+  <section class="container" id="projects">
+    <h2>База проектов</h2>
+    <div class="grid">
+      <aside class="sidebar">
+        <div class="sidebar-title">Категории и фильтры</div>
+        <div class="chip-list" id="chips"></div>
+
+        <label class="control-label" for="level">Уровень сложности</label>
+        <select id="level">
+          <option value="">Любая сложность</option>
+          <option value="easy">Лёгкий</option>
+          <option value="medium">Средний</option>
+          <option value="hard">Сложный</option>
+        </select>
+
+        <label class="control-label" for="input">Поиск по теме</label>
+        <input id="input" placeholder="Название, описание, этапы, категория">
+
+        <label class="control-label" for="sort">Сортировка</label>
+        <select id="sort">
+          <option value="default">По умолчанию</option>
+          <option value="title">По названию</option>
+          <option value="likes">По лайкам</option>
+        </select>
+
+        <div class="btn-row">
+          <button class="btn" id="searchBtn" type="button">Показать результат</button>
+          <button class="btn secondary" id="randomBtn" type="button">Случайные</button>
+          <button class="btn secondary" id="popularBtn" type="button">Популярные</button>
+        </div>
+
+        <p class="hint">По умолчанию проекты теперь подгружаются с сервера постранично, а полный массив нужен только для специальных режимов вроде случайной подборки и сортировки по лайкам.</p>
+      </aside>
+
+      <div class="results-shell">
+        <div class="meta-badge" id="meta">Готово к загрузке проектов.</div>
+        <div id="res"></div>
+        <div class="pagination" id="pagination"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="container" id="favorites">
+    <h2>Избранное</h2>
+    <div class="saved-meta" id="favCount">Нет сохранённых проектов</div>
+    <div id="savedListFull"></div>
+  </section>
+</main>
 
 <footer class="footer">
   <div class="footer-content">
@@ -481,11 +746,6 @@ body{
   </div>
 </footer>
 
-<script>
-if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-  window.location.replace("mobile.html");
-}
-</script>
 <script src="app.js"></script>
 </body>
 </html>
