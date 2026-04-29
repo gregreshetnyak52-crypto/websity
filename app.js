@@ -254,11 +254,15 @@ const PER_PAGE = 5;
 const state = {
   activeCategory: "",
   page: 1,
+  savedPage: 1,
   collectionMode: "page",
   total: 0,
   totalPages: 0,
   renderedItems: [],
   clientList: [],
+  catalogProjects: null,
+  catalogPromise: null,
+  activeModalProject: null,
   serverAvailable: null,
   fallbackProjects: null,
   requestId: 0
@@ -312,6 +316,8 @@ function renderMemoAccordion() {
 function bindControls() {
   const menuToggle = document.getElementById("menuToggle");
   const nav = document.getElementById("siteNav");
+  const modal = document.getElementById("projectModal");
+  const modalClose = document.getElementById("projectModalClose");
   const input = document.getElementById("input");
   const level = document.getElementById("level");
   const sort = document.getElementById("sort");
@@ -337,6 +343,24 @@ function bindControls() {
     if (!document.body.classList.contains("menu-open")) return;
     if (menuToggle?.contains(event.target) || nav?.contains(event.target)) return;
     closeMenu();
+  });
+
+  if (modalClose) {
+    modalClose.addEventListener("click", closeProjectModal);
+  }
+
+  if (modal) {
+    modal.addEventListener("click", (event) => {
+      if (event.target instanceof HTMLElement && event.target.dataset.modalClose === "true") {
+        closeProjectModal();
+      }
+    });
+  }
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape") return;
+    if (document.body.classList.contains("menu-open")) closeMenu();
+    if (!modal?.hidden) closeProjectModal();
   });
 
   if (input) {
@@ -511,13 +535,25 @@ function renderProjectResults(modeLabel) {
   meta.textContent = `${modeLabel}: ${state.total} проектов | страница ${state.page} из ${Math.max(state.totalPages, 1)}`;
 
   items.forEach((project) => {
-    res.appendChild(createProjectCard(project, {
-      primaryLabel: `❤️ ${likes[project.title] || 0}`,
-      onPrimary: () => likeProject(project.title),
-      secondaryLabel: savedProjects.some((item) => item.title === project.title) ? "✓ В избранном" : "💾 Сохранить",
-      onSecondary: () => saveProject(project),
-      secondaryVariant: savedProjects.some((item) => item.title === project.title) ? "ghost" : "secondary"
-    }));
+    const isSaved = isProjectSaved(project.title);
+    res.appendChild(createProjectCard(project, [
+      {
+        label: `❤️ ${likes[project.title] || 0}`,
+        onClick: () => likeProject(project.title)
+      },
+      {
+        label: isSaved ? "✓ В избранном" : "💾 Сохранить",
+        onClick: () => saveProject(project),
+        variant: isSaved ? "ghost" : "secondary",
+        disabled: isSaved
+      },
+      {
+        label: "Подробнее",
+        onClick: () => openProjectModal(project),
+        variant: "ghost",
+        className: "card-details"
+      }
+    ]));
   });
 
   if (state.totalPages > 1) {
@@ -533,7 +569,7 @@ function renderProjectResults(modeLabel) {
   }
 }
 
-function createProjectCard(project, actions) {
+function createProjectCard(project, actions = []) {
   const card = document.createElement("article");
   card.className = "card";
 
@@ -565,22 +601,248 @@ function createProjectCard(project, actions) {
   const actionsWrap = document.createElement("div");
   actionsWrap.className = "card-actions";
 
-  const primaryButton = document.createElement("button");
-  primaryButton.type = "button";
-  primaryButton.className = "btn";
-  primaryButton.textContent = actions.primaryLabel;
-  primaryButton.addEventListener("click", actions.onPrimary);
-  actionsWrap.appendChild(primaryButton);
-
-  const secondaryButton = document.createElement("button");
-  secondaryButton.type = "button";
-  secondaryButton.className = `btn${actions.secondaryVariant === "secondary" ? " secondary" : actions.secondaryVariant === "ghost" ? " ghost" : ""}`;
-  secondaryButton.textContent = actions.secondaryLabel;
-  secondaryButton.disabled = actions.secondaryVariant === "ghost";
-  secondaryButton.addEventListener("click", actions.onSecondary);
-  actionsWrap.appendChild(secondaryButton);
+  actions.forEach((action) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = [
+      "btn",
+      action.variant === "secondary" ? "secondary" : "",
+      action.variant === "ghost" ? "ghost" : "",
+      action.className || ""
+    ].filter(Boolean).join(" ");
+    button.textContent = action.label;
+    button.disabled = Boolean(action.disabled);
+    if (!action.disabled) {
+      button.addEventListener("click", action.onClick);
+    }
+    actionsWrap.appendChild(button);
+  });
 
   card.appendChild(actionsWrap);
+  return card;
+}
+
+async function openProjectModal(project) {
+  const modal = document.getElementById("projectModal");
+  if (!modal) return;
+
+  closeMenu();
+  state.activeModalProject = normalizeProject(project);
+  renderProjectModal(state.activeModalProject, { loadRelated: true });
+  modal.hidden = false;
+  document.body.classList.add("modal-open");
+  document.getElementById("projectModalClose")?.focus();
+}
+
+function closeProjectModal() {
+  const modal = document.getElementById("projectModal");
+  if (!modal) return;
+
+  modal.hidden = true;
+  document.body.classList.remove("modal-open");
+  state.activeModalProject = null;
+  const copyStatus = document.getElementById("projectModalCopyStatus");
+  if (copyStatus) copyStatus.textContent = "";
+}
+
+function renderProjectModal(project, options = {}) {
+  const normalized = normalizeProject(project);
+  state.activeModalProject = normalized;
+
+  const title = document.getElementById("projectModalTitle");
+  const tags = document.getElementById("projectModalTags");
+  const meta = document.getElementById("projectModalMeta");
+  const body = document.getElementById("projectModalBody");
+  const actions = document.getElementById("projectModalActions");
+  const copyStatus = document.getElementById("projectModalCopyStatus");
+  if (!title || !tags || !meta || !body || !actions || !copyStatus) return;
+
+  title.textContent = normalized.title;
+  tags.innerHTML = normalized.tagList.map((tag) => `<span class="tag" style="background:${colorForTag(tag)}">${escapeHtml(tag)}</span>`).join("");
+  meta.innerHTML = [
+    `<span class="modal-pill">${levelIcon(normalized.level)} ${escapeHtml(String(normalized.level || "").toUpperCase())}</span>`,
+    `<span class="modal-pill">❤️ ${likes[normalized.title] || 0}</span>`,
+    `<span class="modal-pill">${normalized.tagList.length} ${pluralize(normalized.tagList.length, "категория", "категории", "категорий")}</span>`
+  ].join("");
+
+  body.innerHTML = `
+    <section class="modal-section">
+      <h4>О чём проект</h4>
+      <p>${escapeHtml(normalized.desc || "Описание не указано.")}</p>
+    </section>
+    <section class="modal-section">
+      <h4>Цель проекта</h4>
+      <p>${escapeHtml(normalized.goal || "Цель не указана.")}</p>
+    </section>
+    <section class="modal-section">
+      <h4>Этапы работы</h4>
+      ${buildStepsMarkup(normalized.steps)}
+    </section>
+  `;
+
+  copyStatus.textContent = "";
+  renderProjectModalActions(normalized);
+
+  if (options.loadRelated) {
+    loadSimilarProjects(normalized);
+  }
+}
+
+function renderProjectModalActions(project) {
+  const actions = document.getElementById("projectModalActions");
+  if (!actions) return;
+
+  const isSaved = isProjectSaved(project.title);
+  actions.innerHTML = "";
+
+  const buttons = [
+    {
+      label: "📋 Скопировать идею",
+      variant: "",
+      onClick: (event) => copyProjectIdea(project, event.currentTarget)
+    },
+    {
+      label: isSaved ? "🗑️ Удалить из избранного" : "💾 Сохранить в избранное",
+      variant: isSaved ? "secondary" : "secondary",
+      onClick: () => {
+        if (isSaved) {
+          removeSavedProject(project.title);
+        } else {
+          saveProject(project);
+        }
+        refreshOpenProjectModal();
+      }
+    },
+    {
+      label: `❤️ Поставить лайк (${likes[project.title] || 0})`,
+      variant: "ghost",
+      onClick: () => {
+        likeProject(project.title);
+        refreshOpenProjectModal();
+      }
+    }
+  ];
+
+  buttons.forEach((item) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = ["btn", item.variant].filter(Boolean).join(" ");
+    button.textContent = item.label;
+    button.addEventListener("click", item.onClick);
+    actions.appendChild(button);
+  });
+}
+
+function refreshOpenProjectModal() {
+  if (!state.activeModalProject) return;
+  renderProjectModal(state.activeModalProject, { loadRelated: false });
+}
+
+async function loadSimilarProjects(project) {
+  const relatedWrap = document.getElementById("projectModalRelated");
+  if (!relatedWrap) return;
+
+  relatedWrap.innerHTML = "<div class=\"loading-state\">Подбираю похожие проекты...</div>";
+
+  try {
+    const catalog = await ensureCatalogProjects();
+    if (!state.activeModalProject || state.activeModalProject.title !== project.title) return;
+
+    const related = findSimilarProjects(project, catalog, 4);
+    if (!related.length) {
+      relatedWrap.innerHTML = "<div class=\"status-empty\">Пока не нашлось похожих тем. Попробуйте открыть другой проект или посмотреть общую выдачу.</div>";
+      return;
+    }
+
+    relatedWrap.innerHTML = "";
+    related.forEach((entry) => {
+      relatedWrap.appendChild(createRelatedCard(entry));
+    });
+  } catch (error) {
+    console.error("Не удалось подобрать похожие проекты:", error);
+    relatedWrap.innerHTML = "<div class=\"status-empty\">Не удалось подобрать похожие темы прямо сейчас.</div>";
+  }
+}
+
+async function ensureCatalogProjects() {
+  if (state.catalogProjects) return state.catalogProjects;
+  if (state.catalogPromise) return state.catalogPromise;
+
+  state.catalogPromise = (async () => {
+    try {
+      const payload = await requestServerProjects({ full: "1" });
+      return payload.items.map(normalizeProject);
+    } catch (error) {
+      return loadFallbackProjects();
+    }
+  })();
+
+  const catalog = await state.catalogPromise;
+  state.catalogProjects = catalog.map(normalizeProject);
+  state.catalogPromise = null;
+  return state.catalogProjects;
+}
+
+function findSimilarProjects(project, catalog, limit = 4) {
+  const tagSet = new Set(project.tagList);
+  const ranked = catalog
+    .filter((item) => item.title !== project.title)
+    .map((item) => {
+      const sharedTags = item.tagList.filter((tag) => tagSet.has(tag));
+      const sameLevelBonus = item.level === project.level ? 2 : 0;
+      const score = sharedTags.length * 10 + sameLevelBonus;
+      return { project: item, sharedTags, score };
+    })
+    .filter((item) => item.score > 0)
+    .sort((a, b) => b.score - a.score || a.project.title.localeCompare(b.project.title, "ru"));
+
+  if (ranked.length >= limit) {
+    return ranked.slice(0, limit);
+  }
+
+  const fallback = catalog
+    .filter((item) => item.title !== project.title && !ranked.some((entry) => entry.project.title === item.title))
+    .map((item) => ({
+      project: item,
+      sharedTags: [],
+      score: item.level === project.level ? 1 : 0
+    }))
+    .filter((item) => item.score > 0)
+    .sort((a, b) => a.project.title.localeCompare(b.project.title, "ru"));
+
+  return [...ranked, ...fallback].slice(0, limit);
+}
+
+function createRelatedCard(entry) {
+  const card = document.createElement("article");
+  card.className = "related-card";
+
+  const title = document.createElement("h5");
+  title.textContent = entry.project.title;
+  card.appendChild(title);
+
+  const tags = document.createElement("div");
+  tags.className = "related-tags";
+  const displayTags = entry.sharedTags.length ? entry.sharedTags : entry.project.tagList.slice(0, 3);
+  displayTags.forEach((tag) => {
+    const badge = document.createElement("span");
+    badge.className = "related-tag";
+    badge.textContent = tag;
+    tags.appendChild(badge);
+  });
+  card.appendChild(tags);
+
+  const summary = document.createElement("p");
+  summary.textContent = truncateText(entry.project.desc || "Описание не указано.", 120);
+  card.appendChild(summary);
+
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "btn ghost small";
+  button.textContent = "Открыть проект";
+  button.addEventListener("click", () => openProjectModal(entry.project));
+  card.appendChild(button);
+
   return card;
 }
 
@@ -620,13 +882,23 @@ function renderSavedProjects() {
   meta.textContent = `Сохранено проектов: ${savedProjects.length} | страница ${state.savedPage} из ${pages}`;
 
   items.forEach((project) => {
-    wrap.appendChild(createProjectCard(project, {
-      primaryLabel: "📄 TXT",
-      onPrimary: () => exportProject(project),
-      secondaryLabel: "🗑️ Удалить",
-      onSecondary: () => removeSavedProject(project.title),
-      secondaryVariant: "secondary"
-    }));
+    wrap.appendChild(createProjectCard(project, [
+      {
+        label: "📄 TXT",
+        onClick: () => exportProject(project)
+      },
+      {
+        label: "🗑️ Удалить",
+        onClick: () => removeSavedProject(project.title),
+        variant: "secondary"
+      },
+      {
+        label: "Подробнее",
+        onClick: () => openProjectModal(project),
+        variant: "ghost",
+        className: "card-details"
+      }
+    ]));
   });
 
   if (pages > 1) {
@@ -667,8 +939,12 @@ function likeProject(title) {
   renderProjectResults(buildModeLabel(state.collectionMode));
 }
 
+function isProjectSaved(title) {
+  return savedProjects.some((project) => project.title === title);
+}
+
 function saveProject(project) {
-  if (savedProjects.some((item) => item.title === project.title)) return;
+  if (isProjectSaved(project.title)) return;
   savedProjects = mergeSavedProjects([project], savedProjects);
   persistSavedProjects();
   renderSavedProjects();
@@ -912,6 +1188,90 @@ function renderFailureState() {
   pagination.innerHTML = "";
 }
 
+async function copyProjectIdea(project, button) {
+  const text = buildProjectCopyText(project);
+  const status = document.getElementById("projectModalCopyStatus");
+  const labelBefore = button?.textContent || "";
+  let copied = false;
+
+  try {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(text);
+      copied = true;
+    }
+  } catch (error) {
+    copied = false;
+  }
+
+  if (!copied) {
+    copied = fallbackCopyText(text);
+  }
+
+  if (status) {
+    status.textContent = copied
+      ? "Описание проекта скопировано в буфер обмена."
+      : "Не удалось скопировать текст автоматически.";
+  }
+
+  if (button && copied) {
+    button.textContent = "Скопировано";
+    window.setTimeout(() => {
+      button.textContent = labelBefore;
+    }, 1400);
+  }
+}
+
+function buildProjectCopyText(project) {
+  return [
+    project.title,
+    `Категории: ${project.tagList.join(", ")}`,
+    `Сложность: ${project.level}`,
+    "",
+    `Описание: ${project.desc || ""}`,
+    "",
+    `Цель: ${project.goal || ""}`,
+    "",
+    `Этапы: ${project.steps || ""}`
+  ].join("\n");
+}
+
+function fallbackCopyText(text) {
+  try {
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    textarea.setAttribute("readonly", "true");
+    textarea.style.position = "fixed";
+    textarea.style.opacity = "0";
+    document.body.appendChild(textarea);
+    textarea.select();
+    const copied = document.execCommand("copy");
+    textarea.remove();
+    return copied;
+  } catch (error) {
+    return false;
+  }
+}
+
+function buildStepsMarkup(steps) {
+  const normalized = String(steps || "").trim();
+  if (!normalized) {
+    return "<p>Этапы пока не указаны.</p>";
+  }
+
+  if (!normalized.includes("→")) {
+    return `<p>${escapeHtml(normalized)}</p>`;
+  }
+
+  const items = normalized
+    .split(/\s*→\s*/)
+    .map((item) => item.trim())
+    .filter(Boolean)
+    .map((item) => `<li>${escapeHtml(item)}</li>`)
+    .join("");
+
+  return `<ul>${items}</ul>`;
+}
+
 function createParagraph(text, strongPrefix = false) {
   const paragraph = document.createElement("p");
   if (!strongPrefix) {
@@ -942,6 +1302,21 @@ function levelIcon(level) {
 function colorForTag(tag) {
   const hash = [...tag].reduce((acc, char) => acc + char.charCodeAt(0), 0);
   return TAG_PALETTE[hash % TAG_PALETTE.length];
+}
+
+function truncateText(text, limit = 120) {
+  const normalized = String(text || "").trim();
+  if (normalized.length <= limit) return normalized;
+  return `${normalized.slice(0, limit - 1).trim()}…`;
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/\"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
 
 function mergeSavedProjects(source, target) {

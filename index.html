@@ -45,7 +45,8 @@ body::before{
   pointer-events:none;
   z-index:-1;
 }
-body.menu-open{overflow:hidden}
+body.menu-open,
+body.modal-open{overflow:hidden}
 a{color:inherit}
 button,
 input,
@@ -235,6 +236,12 @@ select{font:inherit}
   box-shadow:0 14px 28px rgba(255,107,107,0.36);
 }
 .btn:active{transform:scale(0.97)}
+.btn:disabled{
+  opacity:0.62;
+  cursor:default;
+  transform:none;
+  box-shadow:none;
+}
 .btn.secondary{
   background:linear-gradient(135deg,var(--c5),var(--c8));
   box-shadow:0 10px 24px rgba(109,124,255,0.24);
@@ -430,12 +437,6 @@ select{font:inherit}
   background:var(--card);
   color:var(--text);
 }
-.hint{
-  margin:14px 0 0;
-  color:var(--muted);
-  line-height:1.6;
-  font-size:0.9rem;
-}
 .chip-list{
   display:flex;
   flex-wrap:wrap;
@@ -522,6 +523,191 @@ select{font:inherit}
   gap:10px;
   margin-top:18px;
 }
+.card-actions .btn{
+  flex:1 1 calc(50% - 5px);
+}
+.card-actions .card-details{
+  flex-basis:100%;
+}
+.modal[hidden]{
+  display:none;
+}
+.modal{
+  position:fixed;
+  inset:0;
+  z-index:520;
+  display:grid;
+  place-items:center;
+  padding:24px;
+}
+.modal-backdrop{
+  position:absolute;
+  inset:0;
+  background:rgba(2,6,23,0.8);
+  backdrop-filter:blur(8px);
+}
+.modal-dialog{
+  position:relative;
+  width:min(1080px,100%);
+  max-height:min(90vh,920px);
+  overflow:hidden;
+  border-radius:28px;
+  border:1px solid rgba(162,155,254,0.34);
+  background:linear-gradient(180deg,rgba(17,26,46,0.98),rgba(15,23,42,0.98));
+  box-shadow:0 36px 90px rgba(0,0,0,0.45);
+}
+.modal-header{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:16px;
+  padding:24px 24px 18px;
+  border-bottom:1px solid var(--line);
+}
+.modal-kicker{
+  margin:0 0 8px;
+  color:#9db0ff;
+  font-size:0.78rem;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+}
+.modal-title{
+  margin:0;
+  font-size:clamp(1.45rem,3vw,2rem);
+  line-height:1.2;
+}
+.modal-close{
+  flex:0 0 auto;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:44px;
+  height:44px;
+  border:none;
+  border-radius:14px;
+  background:rgba(255,255,255,0.08);
+  color:#fff;
+  font-size:1.35rem;
+  cursor:pointer;
+}
+.modal-content{
+  padding:24px;
+  overflow:auto;
+  max-height:calc(min(90vh,920px) - 88px);
+}
+.modal-tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-bottom:16px;
+}
+.modal-top-meta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-bottom:18px;
+}
+.modal-pill{
+  display:inline-flex;
+  align-items:center;
+  min-height:40px;
+  padding:0 14px;
+  border-radius:999px;
+  background:rgba(255,255,255,0.08);
+  color:#dce5ff;
+  font-size:0.9rem;
+  font-weight:700;
+}
+.modal-layout{
+  display:grid;
+  grid-template-columns:minmax(0,1.45fr) minmax(280px,0.9fr);
+  gap:18px;
+  align-items:start;
+}
+.modal-main,
+.modal-side{
+  display:grid;
+  gap:18px;
+}
+.modal-section{
+  padding:20px;
+  border-radius:20px;
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.06);
+}
+.modal-section h4{
+  margin:0 0 12px;
+  font-size:1rem;
+  color:#f4f6ff;
+}
+.modal-section p{
+  margin:10px 0;
+  line-height:1.72;
+}
+.modal-section ul{
+  margin:12px 0 0 20px;
+  padding:0;
+}
+.modal-section li{
+  margin:8px 0;
+  line-height:1.6;
+}
+.modal-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+.modal-actions .btn{
+  flex:1 1 100%;
+}
+.modal-copy-status{
+  min-height:20px;
+  margin-top:10px;
+  color:var(--muted);
+  font-size:0.9rem;
+}
+.related-list{
+  display:grid;
+  gap:12px;
+}
+.related-card{
+  padding:16px;
+  border-radius:18px;
+  background:rgba(15,23,42,0.86);
+  border:1px solid rgba(255,255,255,0.08);
+}
+.related-card h5{
+  margin:0 0 8px;
+  font-size:1rem;
+  line-height:1.4;
+  color:#f4f6ff;
+}
+.related-card p{
+  margin:8px 0 12px;
+  color:var(--muted);
+  line-height:1.6;
+}
+.related-tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-bottom:12px;
+}
+.related-tag{
+  display:inline-flex;
+  align-items:center;
+  padding:4px 9px;
+  border-radius:999px;
+  background:rgba(109,124,255,0.14);
+  color:#dce5ff;
+  font-size:0.76rem;
+  font-weight:700;
+}
+.btn.small{
+  min-height:40px;
+  padding:10px 14px;
+  font-size:0.88rem;
+}
 .pagination{
   display:flex;
   flex-wrap:wrap;
@@ -594,6 +780,9 @@ select{font:inherit}
   .nav a::after{display:none}
   .grid{grid-template-columns:1fr}
   .sidebar{position:static}
+  .modal-layout{
+    grid-template-columns:1fr;
+  }
 }
 @media (max-width: 860px){
   .accordion-grid{grid-template-columns:1fr}
@@ -631,6 +820,25 @@ select{font:inherit}
   }
   .teacher img{
     width:180px;
+  }
+  .card-actions .btn{
+    flex-basis:100%;
+  }
+  .modal{
+    padding:12px;
+  }
+  .modal-header{
+    padding:18px 18px 14px;
+  }
+  .modal-content{
+    padding:18px;
+  }
+  .modal-section{
+    padding:18px;
+  }
+  .modal-close{
+    width:40px;
+    height:40px;
   }
   .btn-row .btn{
     flex-basis:100%;
@@ -718,8 +926,6 @@ select{font:inherit}
           <button class="btn secondary" id="randomBtn" type="button">Случайные</button>
           <button class="btn secondary" id="popularBtn" type="button">Популярные</button>
         </div>
-
-        <p class="hint">По умолчанию проекты теперь подгружаются с сервера постранично, а полный массив нужен только для специальных режимов вроде случайной подборки и сортировки по лайкам.</p>
       </aside>
 
       <div class="results-shell">
@@ -736,6 +942,37 @@ select{font:inherit}
     <div id="savedListFull"></div>
   </section>
 </main>
+
+<div class="modal" id="projectModal" hidden>
+  <div class="modal-backdrop" data-modal-close="true"></div>
+  <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="projectModalTitle">
+    <div class="modal-header">
+      <div>
+        <p class="modal-kicker">Карточка проекта</p>
+        <h3 class="modal-title" id="projectModalTitle">Проект</h3>
+      </div>
+      <button class="modal-close" id="projectModalClose" type="button" aria-label="Закрыть карточку проекта">✕</button>
+    </div>
+    <div class="modal-content">
+      <div class="modal-tags" id="projectModalTags"></div>
+      <div class="modal-top-meta" id="projectModalMeta"></div>
+      <div class="modal-layout">
+        <div class="modal-main" id="projectModalBody"></div>
+        <aside class="modal-side">
+          <section class="modal-section">
+            <h4>Быстрые действия</h4>
+            <div class="modal-actions" id="projectModalActions"></div>
+            <div class="modal-copy-status" id="projectModalCopyStatus"></div>
+          </section>
+          <section class="modal-section">
+            <h4>Похожие темы</h4>
+            <div class="related-list" id="projectModalRelated"></div>
+          </section>
+        </aside>
+      </div>
+    </div>
+  </div>
+</div>
 
 <footer class="footer">
   <div class="footer-content">
