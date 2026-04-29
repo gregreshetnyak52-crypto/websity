@@ -5,290 +5,487 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Project Finder PRO</title>
 <style>
-:root{--bg:#0b1220;--panel:#0f172a;--card:#111a2e;--muted:#8ea0c7;--text:#e6ecff;--accent:#6d7cff}
-:root{--c1:#ff6b6b;--c2:#4ecdc4;--c3:#ffe66d;--c4:#95e1d3;--c5:#a29bfe;--c6:#fd79ab;--c7:#fab1a0;--c8:#00cec9}
+:root{
+  --bg:#0b1220;
+  --panel:#0f172a;
+  --card:#111a2e;
+  --muted:#8ea0c7;
+  --text:#e6ecff;
+  --accent:#6d7cff;
+  --c1:#ff6b6b;
+  --c2:#4ecdc4;
+  --c3:#ffe66d;
+  --c4:#95e1d3;
+  --c5:#a29bfe;
+  --c6:#fd79ab;
+  --c7:#fab1a0;
+  --c8:#00cec9;
+}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460);color:var(--text);display:flex;flex-direction:column;min-height:100vh}
-.header{position:sticky;top:0;z-index:100;display:flex;justify-content:space-between;padding:15px 8%;background:rgba(0,0,0,0.7);backdrop-filter:blur(10px)}
-.nav a{margin-left:15px;color:#cbd5ff;text-decoration:none}
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460);
+  color:var(--text);
+  display:flex;
+  flex-direction:column;
+  min-height:100vh;
+}
+.header{
+  position:sticky;
+  top:0;
+  z-index:100;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
+  padding:16px 8%;
+  background:rgba(0,0,0,0.74);
+  backdrop-filter:blur(12px);
+}
+.brand{
+  font-size:1.35rem;
+  font-weight:800;
+  letter-spacing:0.02em;
+}
+.nav{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+  gap:14px;
+}
+.nav a{
+  color:#d9e2ff;
+  text-decoration:none;
+  font-size:0.98rem;
+}
 .nav a:hover{color:var(--c3)}
-.hero{height:70vh;display:flex;align-items:center;justify-content:center;text-align:center;background:linear-gradient(135deg,#667eea,#764ba2);position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;width:200%;height:200%;background:radial-gradient(circle,rgba(255,255,255,0.1) 1px,transparent 1px);background-size:30px 30px;animation:move 20s linear infinite}
-@keyframes move{0%{transform:translate(0,0)}100%{transform:translate(-50%,-50%)}}
-.hero h1{font-size:3em;margin:0 0 10px;text-shadow:3px 3px 0 var(--c1)}
-.hero p{font-size:1.2em;color:#ffe}
-.container{padding:40px 8%;max-width:1200px;margin:0 auto}
-.container h2{font-size:2em;margin-bottom:30px;background:linear-gradient(90deg,var(--c1),var(--c2),var(--c3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.teacher{display:flex;gap:30px;flex-wrap:wrap;align-items:center}
-.teacher img{width:220px;border-radius:16px;border:4px solid var(--c2)}
-.grid{display:grid;grid-template-columns:280px 1fr;gap:25px}
-.sidebar{background:var(--panel);padding:20px;border-radius:16px;border:2px solid var(--c5)}
-.sidebar select,.sidebar input{width:100%;padding:10px;margin-top:10px;border-radius:8px;border:none;background:var(--card);color:var(--text)}
-.btn{background:linear-gradient(135deg,var(--c1),var(--c6));border:none;padding:10px 16px;color:white;border-radius:25px;margin:5px 5px 5px 0;cursor:pointer;font-size:14px;font-weight:bold;transition:all 0.3s;box-shadow:0 4px 15px rgba(255,107,107,0.3)}
-.btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(255,107,107,0.5)}
-.btn:active{transform:scale(0.95)}
-.chip{display:inline-block;padding:8px 14px;background:var(--card);border-radius:20px;margin:4px;cursor:pointer;font-size:13px;border:2px solid transparent;transition:all 0.3s}
-.chip:hover{border-color:var(--c2);transform:scale(1.05)}
-.chip.active{background:linear-gradient(135deg,var(--c2),var(--c8));border-color:var(--c3)}
-.card{background:var(--card);padding:20px;border-radius:16px;margin-top:20px;border:2px solid transparent;transition:all 0.3s;box-shadow:0 4px 15px rgba(0,0,0,0.2)}
-.card:hover{border-color:var(--c2);transform:translateY(-5px);box-shadow:0 8px 25px rgba(78,205,196,0.3)}
-.card h3{font-size:1.3em;margin:0 0 15px;background:linear-gradient(90deg,var(--c2),var(--c1));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.card p{line-height:1.6;margin:10px 0}
-.card ul{margin:10px 0 10px 20px}
-.card li{margin:6px 0}
-.meta{color:var(--muted);margin-bottom:15px}
-.pagination{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
-.page-btn{padding:10px 16px;border:none;border-radius:10px;background:var(--panel);color:var(--text);cursor:pointer;font-weight:bold;transition:all 0.3s}
-.page-btn:hover{background:var(--c5)}
-.page-btn.active{background:linear-gradient(135deg,var(--c5),var(--c6));transform:scale(1.1)}
-.saved{background:var(--panel);padding:20px;border-radius:16px;margin-top:30px;border:2px dashed var(--c3)}
-.saved h3{color:var(--c3)}
-.tag{padding:5px 12px;background:linear-gradient(135deg,var(--c5),var(--c6));border-radius:12px;font-size:11px;color:white;margin-right:6px}
-.tag-cloud{margin:10px 0}
-.footer{padding:30px 0;background:#020617;margin-top:auto;text-align:center;color:var(--muted);width:100%}
-.footer-content{padding:0 8%}
-.pamjatka-section{margin-top:40px}
-.pamjatka-section .card{margin-top:25px;border-left:4px solid var(--c2)}
-@media(max-width:768px){.grid{grid-template-columns:1fr}.header{flex-direction:column;gap:10px}.container{padding:20px 5%}.hero{height:50vh}.hero h1{font-size:2em}}
+.hero{
+  min-height:70vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:60px 8%;
+  background:linear-gradient(135deg,#667eea,#764ba2);
+  position:relative;
+  overflow:hidden;
+}
+.hero::before{
+  content:"";
+  position:absolute;
+  inset:-50%;
+  background:radial-gradient(circle,rgba(255,255,255,0.1) 1px,transparent 1px);
+  background-size:30px 30px;
+  animation:move 20s linear infinite;
+}
+@keyframes move{
+  0%{transform:translate(0,0)}
+  100%{transform:translate(-50%,-50%)}
+}
+.hero-inner{
+  position:relative;
+  z-index:1;
+  max-width:720px;
+}
+.hero h1{
+  margin:0 0 16px;
+  font-size:clamp(2.6rem,5vw,4rem);
+  line-height:1.05;
+  text-shadow:3px 3px 0 var(--c1);
+}
+.hero p{
+  margin:0 0 28px;
+  font-size:1.2rem;
+  color:#fff7e8;
+}
+.container{
+  width:min(1200px,100% - 64px);
+  margin:0 auto;
+  padding:40px 0;
+}
+.container h2{
+  margin:0 0 16px;
+  font-size:2rem;
+  background:linear-gradient(90deg,var(--c1),var(--c2),var(--c3));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.section-intro{
+  max-width:760px;
+  margin:0 0 28px;
+  color:#dae4ff;
+  line-height:1.65;
+}
+.teacher{
+  display:flex;
+  gap:30px;
+  flex-wrap:wrap;
+  align-items:center;
+  background:rgba(15,23,42,0.78);
+  border:1px solid rgba(162,155,254,0.35);
+  border-radius:24px;
+  padding:28px;
+  box-shadow:0 16px 40px rgba(0,0,0,0.25);
+}
+.teacher img{
+  width:220px;
+  border-radius:18px;
+  border:4px solid var(--c2);
+  object-fit:cover;
+}
+.teacher-info{
+  flex:1 1 320px;
+}
+.teacher-name{
+  margin:0 0 10px;
+  font-size:1.45rem;
+  font-weight:800;
+}
+.meta{
+  color:var(--muted);
+  margin-bottom:16px;
+}
+.grid{
+  display:grid;
+  grid-template-columns:300px minmax(0,1fr);
+  gap:24px;
+}
+.sidebar,
+.filters{
+  background:var(--panel);
+  padding:22px;
+  border-radius:20px;
+  border:2px solid rgba(162,155,254,0.6);
+  box-shadow:0 12px 28px rgba(0,0,0,0.24);
+}
+.sidebar-title{
+  font-weight:800;
+  margin-bottom:12px;
+}
+.sidebar select,
+.sidebar input{
+  width:100%;
+  padding:12px 14px;
+  margin-top:10px;
+  border-radius:10px;
+  border:none;
+  background:var(--card);
+  color:var(--text);
+  font-size:1rem;
+}
+.btn-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:14px;
+}
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(135deg,var(--c1),var(--c6));
+  border:none;
+  padding:12px 18px;
+  color:#fff;
+  border-radius:999px;
+  cursor:pointer;
+  font-size:0.95rem;
+  font-weight:800;
+  text-decoration:none;
+  transition:transform 0.2s ease,box-shadow 0.2s ease,opacity 0.2s ease;
+  box-shadow:0 10px 24px rgba(255,107,107,0.28);
+}
+.btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 14px 28px rgba(255,107,107,0.36);
+}
+.btn:active{transform:scale(0.97)}
+.btn.secondary{
+  background:linear-gradient(135deg,var(--c5),var(--c8));
+  box-shadow:0 10px 24px rgba(109,124,255,0.24);
+}
+.chip-list{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+.chip{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:9px 14px;
+  background:var(--card);
+  color:var(--text);
+  border-radius:999px;
+  border:none;
+  cursor:pointer;
+  font-size:0.9rem;
+  font-weight:700;
+  border:2px solid transparent;
+  transition:border-color 0.2s ease,transform 0.2s ease,background 0.2s ease;
+}
+.chip:hover{
+  border-color:var(--c2);
+  transform:translateY(-1px);
+}
+.chip.active{
+  background:linear-gradient(135deg,var(--c2),var(--c8));
+  border-color:var(--c3);
+}
+.memo-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:22px;
+}
+.memo-card,
+.card{
+  background:var(--card);
+  padding:22px;
+  border-radius:20px;
+  border:1px solid rgba(78,205,196,0.2);
+  box-shadow:0 12px 28px rgba(0,0,0,0.22);
+}
+.memo-card{
+  border-left:4px solid var(--c2);
+}
+.memo-card.wide{
+  grid-column:1 / -1;
+}
+.memo-card h3,
+.card h3{
+  margin:0 0 14px;
+  font-size:1.28rem;
+  background:linear-gradient(90deg,var(--c2),var(--c1));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.memo-card p,
+.card p{
+  margin:10px 0;
+  line-height:1.68;
+}
+.memo-card ul,
+.card ul{
+  margin:12px 0 0 20px;
+  padding:0;
+}
+.memo-card li,
+.card li{
+  margin:8px 0;
+  line-height:1.58;
+}
+.memo-note{
+  margin-top:14px;
+  padding:12px 14px;
+  border-radius:14px;
+  background:rgba(109,124,255,0.16);
+  border:1px solid rgba(109,124,255,0.3);
+  color:#edf2ff;
+}
+.memo-link{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  margin-top:14px;
+  color:#9db0ff;
+  font-weight:700;
+  text-decoration:none;
+}
+.memo-link:hover{color:#cbd6ff}
+.results-shell{
+  min-width:0;
+}
+.status-empty{
+  padding:20px;
+  border-radius:18px;
+  background:rgba(15,23,42,0.7);
+  border:1px dashed rgba(255,230,109,0.45);
+  color:#f6f0bc;
+}
+.tag-cloud{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin:12px 0 8px;
+}
+.tag{
+  padding:6px 12px;
+  border-radius:999px;
+  font-size:0.8rem;
+  color:#fff;
+  font-weight:700;
+}
+.card-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:18px;
+}
+.pagination{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:22px;
+}
+.page-btn{
+  min-width:44px;
+  min-height:44px;
+  padding:10px 15px;
+  border:none;
+  border-radius:12px;
+  background:var(--panel);
+  color:var(--text);
+  cursor:pointer;
+  font-weight:800;
+}
+.page-btn.active{
+  background:linear-gradient(135deg,var(--c5),var(--c6));
+}
+.saved-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:16px;
+}
+.footer{
+  margin-top:auto;
+  background:#020617;
+  color:var(--muted);
+}
+.footer-content{
+  width:min(1200px,100% - 64px);
+  margin:0 auto;
+  padding:28px 0 34px;
+  text-align:center;
+  line-height:1.7;
+}
+.footer-content hr{
+  margin:18px 0;
+  border:none;
+  border-top:1px solid rgba(255,255,255,0.12);
+}
+.footer a{
+  color:#9db0ff;
+}
+@media (max-width: 960px){
+  .grid{grid-template-columns:1fr}
+  .memo-grid{grid-template-columns:1fr}
+  .memo-card.wide{grid-column:auto}
+  .header{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+}
+@media (max-width: 768px){
+  .container,
+  .footer-content{
+    width:min(100% - 32px,1200px);
+  }
+  .hero{
+    min-height:54vh;
+    padding:48px 16px;
+  }
+  .teacher{
+    padding:22px;
+  }
+}
 </style>
 </head>
-<body>
-<div class="header">
-<div style="font-size:1.3em;font-weight:bold">Project Finder PRO</div>
-<div class="nav"><a href="#home">Главная</a><a href="#teacher">Руководитель</a><a href="#pamjatka">Памятка</a><a href="#projects">Проекты</a><a href="#favorites">Избранное</a></div>
-</div>
-<div class="hero" id="home"><div><h1>Найди идею проекта</h1><p>Полноценный продукт без ИИ</p><a href="#projects"><button class="btn" style="font-size:18px;padding:15px 30px">Начать</button></a></div></div>
-<div class="container" id="teacher"><h2>Руководитель научной деятельности</h2><div class="teacher"><img src="teacher.png"><div><p style="font-size:1.4em"><b>👩‍🏫 Болдурчиди Евгения Михайловна</b></p><p>Руководитель научной деятельности</p><p>Помогает ученикам создавать научные проекты и защищать их.</p><p class="meta">Консультации и поддержка</p></div></div></div>
-<div class="container" id="pamjatka"><h2>Памятка для учеников</h2>
-<div class="pamjatka-section">
-<div class="card"><h3>Для 1-4 класса</h3><p>При организации работы в начальной школе необходимо учитывать возрастные психолого-физиологические особенности детей младшего школьного возраста.</p><ul><li>Темы детских работ выбираются из содержания учебных предметов</li><li>Проблема проекта должна быть в области познавательных интересов ребёнка</li><li>Длительность выполнения проекта — 3-4 недели</li><li>Текстовый файл не обязателен!</li></ul></div>
-<div class="card"><h3>Для 5-7 класса</h3><p>Проектная деятельность организуется в групповых формах. Темы выбираются из любой содержательной области. Получаемый результат должен быть социально и практически значимым.</p></div>
-<div class="card"><h3>Для 8-10 класса</h3><p>Формирование надлежащего уровня компетентности. Темы подбираются в соответствии с личностными предпочтениями. Предпочтительны индивидуальные формы работы.</p></div>
-<div class="card"><h3>Схема проекта</h3><p><b>1. Поиск проблемы</b> — Постановка проблемы ключевой этап.</p><p><b>2. Тематизация</b> — Тема фиксирует суть проекта.</p><p><b>3. Цель проекта</b> — Цель формулируется кратко.</p><p><b>4. Планирование</b> — Мини-план работы.</p><p><b>5. Задачи</b> — Задачи определяют как достичь цели.</p><p><b>6. Теоретическая часть</b> — Работа с информацией.</p><p><b>7. Практическая часть</b> — Предложение решения.</p><p><b>8. Заключение</b> — Анализ полученных данных.</p></div>
-<div class="card"><h3>Виды проекта</h3><p><b>1. Исследовательский</b> — Отвечает на вопрос о том как устроен мир. Включает гипотезу, эксперимент, анализ результатов.</p><p><b>2. Творческий</b> — Максимально свободный подход. Альманахи, театрализации, видеофильмы.</p><p><b>3. Социо-гуманитарный</b> — Поиск решения социальных проблем.</p><p><b>4. Инженерный</b> — Доведение проекта до практического результата.</p></div>
-<div class="card"><h3>Площадки для поиска тем</h3><ul><li><b>Проектория</b> — отечественные компании</li><li><b>Globallab</b> — для исследователей</li><li><b>Школа реальных дел</b> — кейсы от компаний</li><li><b>Школа IT-решений</b> — IT-кейсы</li><li><b>Мосгортех</b> — московские предприятия</li><li><b>Энергопрорыв</b> — энергетика</li></ul></div>
-<div class="card"><h3>Оформление и содержание проекта</h3><p><b>Титульный лист:</b> Наименование учебного заведения, тема проекта, ФИО автора и руководителя, город и год.</p><p><b>Паспорт:</b> Тема, ФИО, график работы.</p><p><b>Оглавление:</b> Наименование глав с номерами страниц.</p><p><b>Введение (1-2 стр):</b> Проблема, актуальность, цель, задачи.</p><p><b>Теоретическая часть (7-10 стр):</b> Подходы к исследованию.</p><p><b>Практическая часть:</b> 4-6 кл: 4-7 стр, 7-8 кл: 6-8 стр, 10 кл: 10-15 стр.</p><p><b>Заключение (1-2 стр):</b> Вывод результатов.</p><p><b>Список литературы:</b> Источники информации.</p><p style="color:var(--accent)"><b>Важно! Работа в 10 классе проверяется на антиплагиат (оригинальность >60%).</b></p></div>
-<div class="card"><h3>Оформление текста</h3><ul><li>Редактор: Microsoft Word</li><li>Формат: А4, белая бумага</li><li>Поля: 30/20/15/20 мм</li><li>Шрифт: Times New Roman 14pt</li><li>Интервал: полуторный</li><li>Нумерация: сквозная</li><li>Титульный лист — без номера</li></ul></div>
-<div class="card"><h3>Оформление презентации</h3><p>Электронная презентация — набор слайдов для демонстрации.</p><ul><li>Минимум текста</li><li>Текст не визуальное средство</li><li>Не размещать много на одном слайде</li></ul><p style="margin-top:15px"><a href="https://docs.google.com/presentation/d/1-_SSuNtrwtoXGVY3aVeDvfeaYmkCpxAO/edit?usp=drive_link&ouid=116324512383519059211&rtpof=true&sd=true" target="_blank" style="color:#6d7cff;font-weight:bold">📥 Шаблон презентации</a></p></div>
-<div class="card"><h3>📊 Критерии оценивания</h3><p>Основные критерии оценки научного проекта:</p><ul><li><b>Актуальность темы</b> — насколько тема важна и современна</li><li><b>Цель и задачи</b> — чёткость и достижимость</li><li><b>Теоретическая часть</b> — глубина исследования</li><li><b>Практическая часть</b> — результаты и их применение</li><li><b>Оформление</b> — соблюдение стандартов</li><li><b>Защита</b> — умение презентовать</li></ul><p style="margin-top:15px"><a href="https://drive.google.com/file/d/1ExFdT4eL9JNuPWYbSA-5hFKuYLj3pl_X/view?usp=drive_link" target="_blank" style="color:#6d7cff;font-weight:bold">📥 Критерии оценивания</a></p></div>
-<div class="card"><h3>📁 Пример проекта</h3><p>Ознакомьтесь с примером выполненного проекта:</p><p style="margin-top:15px"><a href="https://disk.yandex.ru/i/GyXFaEq3DL-TWA" target="_blank" style="color:#6d7cff;font-weight:bold">📥 Скачать пример проекта</a></p></div>
-</div></div>
-<div class="container" id="projects"><h2>База проектов</h2>
-<div class="grid">
-<div class="sidebar">
-<div style="margin-bottom:10px;font-weight:bold">Категории</div>
-<div id="chips"></div>
-<select id="level"><option value="">Любая сложность</option><option value="easy">Лёгкий</option><option value="medium">Средний</option><option value="hard">Сложный</option></select>
-<input id="input" placeholder="Поиск проектов...">
-<button class="btn" onclick="applySearch()">Найти</button>
-<button class="btn" onclick="random()">Случайные</button>
-<button class="btn" onclick="popular()">Популярные</button>
-<select id="sort" onchange="applySearch()"><option value="default">По умолчанию</option><option value="likes">По лайкам</option><option value="title">По названию</option></select>
-</div>
-<div>
-<div class="meta" id="meta"></div>
-<div id="res"></div>
-<div class="pagination" id="pagination"></div>
-<div style="display:none" id="savedList"></div>
-</div>
-</div>
-<div class="container" id="favorites"><h2>⭐ Избранное</h2>
-<p class="meta" id="favCount"></p>
-<div id="savedListFull"></div>
-</div>
-<div class="footer">
-<div class="footer-content">
-📍 Москва, ул. Верхняя, д. 20, стр. 3, ЖК «Суббота»<br>
-🌐 <a href="https://leaders-is.ru/" target="_blank" style="color:#6d7cff">leaders-is.ru</a><br>
-<hr style="margin:20px 0;border:none;border-top:1px solid #333">
-Project Finder © 2026<br>
-<a href="mobile.html" style="color:#6d7cff;font-size:0.9em">📱 Мобильная версия</a>
-</div>
-</div>
+<body data-view="desktop">
+<header class="header">
+  <div class="brand">Project Finder PRO</div>
+  <nav class="nav">
+    <a href="#home">Главная</a>
+    <a href="#teacher">Руководитель</a>
+    <a href="#pamjatka">Памятка</a>
+    <a href="#projects">Проекты</a>
+    <a href="#favorites">Избранное</a>
+  </nav>
+</header>
+
+<section class="hero" id="home">
+  <div class="hero-inner">
+    <h1>Найди идею проекта</h1>
+    <p>Удобная база тем, требования к оформлению и памятка по проектной работе в одном месте.</p>
+    <a href="#projects" class="btn">Перейти к проектам</a>
+  </div>
+</section>
+
+<section class="container" id="teacher">
+  <h2>Руководитель научной деятельности</h2>
+  <div class="teacher">
+    <img src="teacher.png" alt="Евгения Михайловна">
+    <div class="teacher-info">
+      <p class="teacher-name">Болдурчиди Евгения Михайловна</p>
+      <p>Руководитель научной деятельности. Помогает ученикам собирать сильные темы, выстраивать структуру проекта и уверенно готовиться к защите.</p>
+      <p class="meta">Консультации, сопровождение проекта, поддержка на всех этапах работы.</p>
+    </div>
+  </div>
+</section>
+
+<section class="container" id="pamjatka">
+  <h2>Памятка для учеников</h2>
+  <p class="section-intro">Собрал на странице ключевые требования из памятки: что учитывать по классам, как выбрать формат проекта, как оформить текст и презентацию и где искать тему. Этот блок теперь рендерится из одного общего источника для десктопа и мобильной версии, чтобы содержание не расходилось.</p>
+  <div class="memo-grid" id="memoCards"></div>
+</section>
+
+<section class="container" id="projects">
+  <h2>База проектов</h2>
+  <div class="grid">
+    <aside class="sidebar">
+      <div class="sidebar-title">Категории и фильтры</div>
+      <div class="chip-list" id="chips"></div>
+      <select id="level">
+        <option value="">Любая сложность</option>
+        <option value="easy">Лёгкий</option>
+        <option value="medium">Средний</option>
+        <option value="hard">Сложный</option>
+      </select>
+      <input id="input" placeholder="Поиск по теме, описанию или этапам">
+      <select id="sort">
+        <option value="default">По умолчанию</option>
+        <option value="likes">По лайкам</option>
+        <option value="title">По названию</option>
+      </select>
+      <div class="btn-row">
+        <button class="btn" id="searchBtn" type="button">Найти</button>
+        <button class="btn secondary" id="randomBtn" type="button">Случайные</button>
+        <button class="btn secondary" id="popularBtn" type="button">Популярные</button>
+      </div>
+    </aside>
+
+    <div class="results-shell">
+      <div class="meta" id="meta"></div>
+      <div id="res"></div>
+      <div class="pagination" id="pagination"></div>
+    </div>
+  </div>
+</section>
+
+<section class="container" id="favorites">
+  <h2>Избранное</h2>
+  <p class="meta" id="favCount"></p>
+  <div id="savedListFull"></div>
+</section>
+
+<footer class="footer">
+  <div class="footer-content">
+    <div>📍 Москва, ул. Верхняя, д. 20, стр. 3, ЖК «Суббота»</div>
+    <div>🌐 <a href="https://leaders-is.ru/" target="_blank" rel="noopener noreferrer">leaders-is.ru</a></div>
+    <hr>
+    <div>Project Finder © 2026</div>
+  </div>
+</footer>
+
 <script>
 if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-    window.location.href = 'mobile.html';
+  window.location.replace("mobile.html");
 }
-const CATS = ["искусственный интеллект", "роботы", "виртуальная реальность", "Умные устройства", "финтех", "кибербезопасность", "образование", "здоровье", "климат", "блокчейн", "маркетинг", "дизайн", "спорт", "бизнес", "программирование", "экология", "музыка", "искусство", "география", "история", "литература", "физика", "математика", "биология", "химия", "астрономия", "психология", "социология", "право", "экономика", "политика", "медиа", "гастрономия", "мода", "архитектура", "фотография", "кино", "театр"];
-
-let projects = [];
-
-async function loadProjects() {
-  try {
-    const response = await fetch('projects.json');
-    projects = await response.json();
-  } catch (e) {
-    projects = [
-      {title: "Создание сайта-визитки", tags: "программирование образование", level: "easy", desc: "Разработка сайта-визитки для школы", goal: "Освоить базовую вёрстку", steps: "HTML/CSS → макет → код → хостинг"}
-    ];
-  }
-  initChips();
-  render(projects);
-  loadSaved();
-}
-
-let activeCategory = "";
-const chipWrap = document.getElementById("chips");
-
-function initChips() {
-  chipWrap.innerHTML = "";
-  CATS.forEach(t => {
-    let c = document.createElement("div");
-    c.className = "chip";
-    c.innerText = t;
-    c.onclick = () => {
-      activeCategory = t;
-      document.querySelectorAll(".chip").forEach(x => x.classList.remove("active"));
-      c.classList.add("active");
-      applySearch();
-    };
-    chipWrap.appendChild(c);
-  });
-}
-
-let likes = {};
-let saved = [];
-let current = [];
-let page = 1;
-const perPage = 5;
-let tagColors = {};
-
-function render(list) {
-  if (!list || list.length === 0) {
-    document.getElementById("res").innerHTML = "<p>Нет проектов</p>";
-    return;
-  }
-  current = list;
-  let start = (page - 1) * perPage;
-  let paginated = list.slice(start, start + perPage);
-  document.getElementById("meta").innerText = list.length + " проектов | страница " + page;
-  const res = document.getElementById("res");
-  res.innerHTML = "";
-  paginated.forEach((p, i) => {
-    let div = document.createElement("div");
-    div.className = "card";
-    let tags = p.tags.split(" ");
-    let tagsHTML = tags.map(t => {
-      if (!tagColors[t]) tagColors[t] = ["#ff6b6b", "#4ecdc4", "#ffe66d", "#a29bfe", "#fd79ab", "#00cec9", "#fab1a0", "#95e1d3"][Math.floor(Math.random() * 8)];
-      return `<span class="tag" style="background:${tagColors[t]}">${t}</span>`;
-    }).join("");
-    let levelColor = p.level === "easy" ? "#4ecdc4" : p.level === "medium" ? "#ffe66d" : "#ff6b6b";
-    let levelIcon = p.level === "easy" ? "⭐" : p.level === "medium" ? "⭐⭐" : "⭐⭐⭐";
-    div.innerHTML = "<h3>" + p.title + " 🚀</h3><div class=\"tag-cloud\">" + tagsHTML + "</div><p style='margin-top:12px'>📝 " + p.desc + "</p><p>🎯 <b>Цель:</b> " + p.goal + "</p><p>📋 <b>Этапы:</b> " + p.steps + "</p><p style='color:" + levelColor + ";font-weight:bold'>" + levelIcon + " " + p.level.toUpperCase() + "</p><button class='btn' style='margin-right:5px' onclick='like(\"" + p.title + "\")'>❤️ " + (likes[p.title] || 0) + "</button><button class='btn' onclick='saveItem(" + (start + i) + ")'>💾 Сохранить</button>";
-    res.appendChild(div);
-  });
-  renderPagination(list.length);
-}
-
-function renderPagination(total) {
-  const pages = Math.ceil(total / perPage);
-  const wrap = document.getElementById("pagination");
-  wrap.innerHTML = "";
-  for (let i = 1; i <= pages; i++) {
-    let btn = document.createElement("button");
-    btn.className = "page-btn" + (i === page ? " active" : "");
-    btn.innerText = i;
-    btn.onclick = () => { page = i; render(current); };
-    wrap.appendChild(btn);
-  }
-}
-
-function applySearch() {
-  page = 1;
-  let val = document.getElementById("input").value.toLowerCase();
-  let level = document.getElementById("level").value;
-  let sort = document.getElementById("sort").value;
-  let list = projects.filter(p => (p.tags.includes(val) || p.title.toLowerCase().includes(val) || val === "") && (level === "" || p.level === level) && (activeCategory === "" || p.tags.includes(activeCategory)));
-  if (sort === "likes") list.sort((a, b) => (likes[b.title] || 0) - (likes[a.title] || 0));
-  if (sort === "title") list.sort((a, b) => a.title.localeCompare(b.title));
-  render(list);
-}
-
-function random() {
-  page = 1;
-  let shuffled = [...projects].sort(() => 0.5 - Math.random());
-  render(shuffled);
-}
-
-function popular() {
-  page = 1;
-  let sorted = [...projects].sort((a, b) => (likes[b.title] || 0) - (likes[a.title] || 0));
-  render(sorted);
-}
-
-function like(title) {
-  likes[title] = (likes[title] || 0) + 1;
-  render(current);
-}
-
-function saveItem(i) {
-  if (!saved.find(p => p.title === current[i].title)) {
-    saved.push(current[i]);
-    loadSaved();
-  }
-}
-
-function removeSaved(i) {
-  saved.splice(i, 1);
-  loadSaved();
-}
-
-let favPage = 1;
-function loadSaved() {
-  let div = document.getElementById("savedList");
-  let divFull = document.getElementById("savedListFull");
-  let count = saved.length;
-  document.getElementById("favCount").innerText = count > 0 ? "Сохранено проектов: " + count + " | страница " + favPage : "Нет сохранённых проектов";
-  const renderCard = (p, i) => {
-    let el = document.createElement("div");
-    el.className = "card";
-    let tags = p.tags.split(" ");
-    let tagsHTML = tags.map(t => {
-      if (!tagColors[t]) tagColors[t] = ["#ff6b6b", "#4ecdc4", "#ffe66d", "#a29bfe", "#fd79ab", "#00cec9", "#fab1a0", "#95e1d3"][Math.floor(Math.random() * 8)];
-      return `<span class="tag" style="background:${tagColors[t]}">${t}</span>`;
-    }).join("");
-    let levelColor = p.level === "easy" ? "#4ecdc4" : p.level === "medium" ? "#ffe66d" : "#ff6b6b";
-    let levelIcon = p.level === "easy" ? "⭐" : p.level === "medium" ? "⭐⭐" : "⭐⭐⭐";
-    el.innerHTML = "<div style='display:flex;justify-content:space-between;align-items:start'><div style='flex:1'><h3>" + p.title + " 🚀</h3><div class='tag-cloud'>" + tagsHTML + "</div><p style='margin-top:10px'>📝 " + p.desc + "</p><p>🎯 <b>Цель:</b> " + p.goal + "</p><p>📋 <b>Этапы:</b> " + p.steps + "</p><p style='color:" + levelColor + ";font-weight:bold'>" + levelIcon + " " + p.level.toUpperCase() + "</p></div><div style='margin-left:15px'><button class='btn' onclick='exportOne(" + i + ")'>📥 PDF</button><br><br><button class='btn' onclick='removeSaved(" + i + ")'>🗑️</button></div></div>";
-    return el;
-  };
-  if (saved.length === 0) {
-    div.innerHTML = divFull.innerHTML = "<p>Нет сохранённых проектов</p>";
-  } else {
-    divFull.innerHTML = "";
-    let start = (favPage - 1) * perPage;
-    let pageItems = saved.slice(start, start + perPage);
-    pageItems.forEach((p, i) => {
-      divFull.appendChild(renderCard(p, start + i));
-    });
-    let pages = Math.ceil(saved.length / perPage);
-    let paginationHTML = "";
-    for (let i = 1; i <= pages; i++) {
-      paginationHTML += `<button class="page-btn ${i === favPage ? 'active' : ''}" onclick="goToFavPage(${i})">${i}</button>`;
-    }
-    divFull.innerHTML += "<div class='pagination'>" + paginationHTML + "</div>";
-  }
-}
-
-function goToFavPage(i) {
-  favPage = i;
-  loadSaved();
-  window.scrollTo(0, document.getElementById("favorites").offsetTop);
-}
-
-function exportOne(i) {
-  let p = saved[i];
-  let content = p.title + "\nКатегория: " + p.tags + "\nСложность: " + p.level + "\n\nОписание: " + p.desc + "\n\nЦель: " + p.goal + "\n\nЭтапы: " + p.steps;
-  const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = p.title.replace(/[^a-zA-Zа-яА-Я0-9]/g, "_") + ".txt";
-  a.click();
-}
-
-// Load projects on page load
-document.addEventListener('DOMContentLoaded', loadProjects);
 </script>
+<script src="app.js"></script>
 </body>
 </html>
