@@ -60,16 +60,15 @@ const MEMO_GROUPS = [
     items: [
       {
         title: "Схема проекта",
-        wide: true,
         body: `
-          <p><b>1. Поиск проблемы.</b> Постановка проблемы — ключевой этап проекта. Правильно сформулированный вопрос уже содержит часть ответа.</p>
-          <p><b>2. Тематизация.</b> Тема должна ясно фиксировать содержание и суть проекта для внешнего зрителя или пользователя.</p>
-          <p><b>3. Цель проекта.</b> Цель формулируется кратко и точно, отражая основной результат, который хочет получить автор.</p>
-          <p><b>4. Планирование.</b> До постановки задач полезно составить мини-план работы.</p>
-          <p><b>5. Задачи.</b> Они показывают, что именно нужно сделать по шагам, чтобы достичь цели.</p>
-          <p><b>6. Теоретическая часть.</b> Сбор и анализ информации из разных источников по предмету исследования.</p>
-          <p><b>7. Практическая часть.</b> Здесь предлагается решение поставленной проблемы.</p>
-          <p><b>8. Заключение.</b> Итог по выполненной работе и анализ полученных данных.</p>
+          <p>📌 <b>1. Поиск проблемы</b> — ключевой этап проекта.</p>
+          <p>🎯 <b>2. Тематизация</b> — фиксирует суть проекта.</p>
+          <p>🏆 <b>3. Цель</b> — краткий основной результат.</p>
+          <p>📋 <b>4. Планирование</b> — мини-план работы.</p>
+          <p>✅ <b>5. Задачи</b> — шаги к цели.</p>
+          <p>📚 <b>6. Теория</b> — сбор информации.</p>
+          <p>🔧 <b>7. Практика</b> — решение проблемы.</p>
+          <p>📝 <b>8. Заключение</b> — итог работы.</p>
         `
       },
       {
@@ -83,13 +82,12 @@ const MEMO_GROUPS = [
       },
       {
         title: "Результатом проекта может быть",
-        wide: true,
         body: `
-          <p><b>Электронные форматы:</b> web-сайт, электронная газета, электронный номер журнала, компьютерная графика, публикация на сайте, 3D-модель.</p>
-          <p><b>Печатные форматы:</b> сценарии мероприятий, статьи, альбомы, буклеты, брошюры, книга, интервью, обзор материалов, сказка, рассказ, стихи, постер, настольная игра.</p>
-          <p><b>Творческие форматы:</b> видеоролик, документальный фильм, мультфильм, видеоклип, буктрейлер, дизайн-макет, конструкторская модель, музыкальное произведение, выставка, театральная постановка.</p>
-          <p><b>Аналитические форматы:</b> научный доклад, бизнес-план, модель, макет, прогноз, сравнительный анализ, отчёт об экспедиции, анализ результатов опроса.</p>
-          <p><b>Систематизирующие форматы:</b> схемы, чертежи, тематический атлас, коллекция, пакет рекомендаций, инструкция, путеводитель, справочник, словарь, проект лабораторной работы.</p>
+          <p>💻 <b>Электронные:</b> сайт, газета, 3D-модель.</p>
+          <p>📄 <b>Печатные:</b> статьи, книги, буклеты, игра.</p>
+          <p>🎨 <b>Творческие:</b> видео, фильм, выставка.</p>
+          <p>📊 <b>Аналитические:</b> доклад, бизнес-план.</p>
+          <p>🗂 <b>Систематизирующие:</b> схемы, атлас, справочник.</p>
         `
       },
       {
@@ -187,10 +185,19 @@ const MEMO_GROUPS = [
         `
       },
       {
-        title: "Пример проекта",
+        title: "Примеры проектов",
         body: `
-          <p>Можно посмотреть готовый пример, чтобы понять объём, структуру и подачу материала.</p>
-          <a class="memo-link" href="https://disk.yandex.ru/i/GyXFaEq3DL-TWA" target="_blank" rel="noopener noreferrer">📥 Скачать пример проекта</a>
+          <p>Можно посмотреть готовые примеры, чтобы понять объём, структуру и подачу материала.</p>
+          <a class="memo-link" href="https://disk.yandex.ru/i/GyXFaEq3DL-TWA" target="_blank" rel="noopener noreferrer">📥 Скачать пример проекта №1</a>
+          <a class="memo-link" href="https://disk.yandex.ru/i/GP9Oj-eldmkP3g" target="_blank" rel="noopener noreferrer">📥 Скачать пример проекта №2</a>
+          <a class="memo-link" href="https://disk.yandex.ru/i/KgOdEnS-Bga0mQ" target="_blank" rel="noopener noreferrer">📥 Скачать пример проекта №3</a>
+        `
+      },
+      {
+        title: "Памятка для учеников",
+        body: `
+          <p>Скачайте полную памятку по оформлению проектных работ в один клик.</p>
+          <a class="memo-link" href="https://drive.google.com/file/d/1WO9wxrvYgUgRM9GN3XmVAv5DTkhal2D1/view?usp=drive_link" target="_blank" rel="noopener noreferrer">📥 Скачать памятку (PDF)</a>
         `
       }
     ]
@@ -248,7 +255,7 @@ const TAG_MATCHERS = TAG_GROUPS
   })))
   .sort((a, b) => b.alias.length - a.alias.length);
 
-const TAG_PALETTE = ["#ff6b6b", "#4ecdc4", "#ffe66d", "#a29bfe", "#fd79ab", "#00cec9", "#fab1a0", "#95e1d3"];
+const TAG_PALETTE = ["#ff6b6b", "#00b894", "#fdcb6e", "#74b9ff", "#a29bfe", "#fd79ab", "#fab1a0", "#00cec9", "#6c5ce7", "#e17055"];
 const PER_PAGE = 5;
 
 const state = {
@@ -1404,4 +1411,38 @@ function pluralize(number, one, few, many) {
   if (mod10 === 1 && mod100 !== 11) return one;
   if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return few;
   return many;
+}
+
+// Добавляем анимацию появления элементов при скролле
+function initScrollAnimations() {
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+        observer.unobserve(entry.target);
+      }
+    });
+  }, observerOptions);
+
+  // Добавляем анимацию для карточек и секций
+  const animatedElements = document.querySelectorAll('.card, .memo-card, .accordion, .teacher, .container h2');
+  animatedElements.forEach((el, index) => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = `opacity 0.5s ease ${index * 0.1}s, transform 0.5s ease ${index * 0.1}s`;
+    observer.observe(el);
+  });
+}
+
+// Запускаем анимацию после загрузки страницы
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initScrollAnimations);
+} else {
+  initScrollAnimations();
 }
