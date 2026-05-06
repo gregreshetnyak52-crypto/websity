@@ -259,11 +259,14 @@ select{font:inherit}
   opacity:0.3;
 }
 .teacher img{
-  width:220px;
-  border-radius:50%;
+  width:240px;
+  height:300px;
+  border-radius:14px;
   border:5px solid var(--c2);
   object-fit:cover;
-  box-shadow:0 8px 20px rgba(0,184,148,0.3);
+  object-position:center top;
+  background:#fff;
+  box-shadow:0 10px 24px rgba(0,184,148,0.24);
   transition:transform 0.3s ease;
 }
 .teacher img:hover{
@@ -386,9 +389,9 @@ select{font:inherit}
   padding:8px 12px;
   border-radius:999px;
   background:rgba(109,124,255,0.14);
-  color:#dce5ff;
+  color:var(--accent);
   font-size:0.84rem;
-  font-weight:700;
+  font-weight:800;
 }
 .accordion-caret{
   flex:0 0 auto;
@@ -398,13 +401,15 @@ select{font:inherit}
   align-items:center;
   justify-content:center;
   border-radius:12px;
-  background:rgba(255,255,255,0.08);
-  color:#fff;
+  background:rgba(108,92,231,0.1);
+  color:var(--accent);
+  font-weight:900;
   transition:transform 0.2s ease,background 0.2s ease;
 }
 .accordion[open] .accordion-caret{
   transform:rotate(45deg);
   background:rgba(78,205,196,0.18);
+  color:#00796f;
 }
 .accordion-panel{
   padding:0 24px 24px;
@@ -504,11 +509,11 @@ select{font:inherit}
   align-items:center;
   gap:8px;
   margin-top:14px;
-  color:#9db0ff;
-  font-weight:700;
+  color:var(--accent);
+  font-weight:800;
   text-decoration:none;
 }
-.memo-link:hover{color:#cfd9ff}
+.memo-link:hover{color:#4b3fd1}
 .grid{
   display:grid;
   grid-template-columns:300px minmax(0,1fr);
@@ -673,8 +678,32 @@ select{font:inherit}
   font-size:0.9rem;
   padding:12px 16px;
 }
+.card-actions .btn.ghost{
+  color:var(--accent);
+  background:rgba(108,92,231,0.08);
+  border:2px solid rgba(108,92,231,0.22);
+  box-shadow:none;
+}
+.card-actions .btn.ghost:hover{
+  color:#fff;
+  background:linear-gradient(135deg,var(--c4),var(--c5));
+  border-color:transparent;
+  box-shadow:0 10px 24px rgba(108,92,231,0.2);
+}
 .card-actions .card-details{
   flex-basis:100%;
+}
+.modal-actions .btn.ghost,
+.related-card .btn.ghost{
+  color:var(--accent);
+  background:rgba(108,92,231,0.08);
+  border:2px solid rgba(108,92,231,0.22);
+}
+.modal-actions .btn.ghost:hover,
+.related-card .btn.ghost:hover{
+  color:#fff;
+  background:linear-gradient(135deg,var(--c4),var(--c5));
+  border-color:transparent;
 }
 .modal[hidden]{
   display:none;
@@ -1043,7 +1072,8 @@ select{font:inherit}
     flex-direction:column;
   }
   .teacher img{
-    width:180px;
+    width:min(100%, 240px);
+    height:300px;
     margin:0 auto;
   }
   .card-actions .btn{

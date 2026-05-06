@@ -8,19 +8,9 @@ const PROJECTS_PATH = path.join(__dirname, "projects.json");
 const RAW_PROJECTS = JSON.parse(fs.readFileSync(PROJECTS_PATH, "utf8"));
 
 const TAG_GROUPS = [
-  { label: "искусственный интеллект", aliases: ["искусственный интеллект"] },
-  { label: "роботы", aliases: ["роботы"] },
-  { label: "виртуальная реальность", aliases: ["виртуальная реальность"] },
-  { label: "Умные устройства", aliases: ["Умные устройства", "интернет вещей"] },
-  { label: "игры", aliases: ["игры"] },
-  { label: "безопасность", aliases: ["безопасность"] },
   { label: "кибербезопасность", aliases: ["кибербезопасность"] },
-  { label: "финтех", aliases: ["финтех"] },
   { label: "образование", aliases: ["образование"] },
   { label: "здоровье", aliases: ["здоровье"] },
-  { label: "климат", aliases: ["климат"] },
-  { label: "блокчейн", aliases: ["блокчейн"] },
-  { label: "маркетинг", aliases: ["маркетинг"] },
   { label: "дизайн", aliases: ["дизайн"] },
   { label: "спорт", aliases: ["спорт"] },
   { label: "бизнес", aliases: ["бизнес"] },
@@ -35,18 +25,13 @@ const TAG_GROUPS = [
   { label: "математика", aliases: ["математика"] },
   { label: "биология", aliases: ["биология"] },
   { label: "химия", aliases: ["химия"] },
-  { label: "астрономия", aliases: ["астрономия"] },
-  { label: "психология", aliases: ["психология"] },
   { label: "социология", aliases: ["социология"] },
   { label: "право", aliases: ["право"] },
   { label: "экономика", aliases: ["экономика"] },
-  { label: "политика", aliases: ["политика"] },
   { label: "медиа", aliases: ["медиа"] },
   { label: "гастрономия", aliases: ["гастрономия"] },
   { label: "мода", aliases: ["мода"] },
   { label: "архитектура", aliases: ["архитектура"] },
-  { label: "фотография", aliases: ["фотография"] },
-  { label: "кино", aliases: ["кино"] },
   { label: "театр", aliases: ["театр"] }
 ];
 
