@@ -907,14 +907,77 @@ function renderSavedProjects() {
 
 function renderPagination(container, pages, activePage, onPageClick) {
   container.innerHTML = "";
-  for (let pageNumber = 1; pageNumber <= pages; pageNumber += 1) {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "page-btn" + (pageNumber === activePage ? " active" : "");
-    button.textContent = String(pageNumber);
-    button.addEventListener("click", () => onPageClick(pageNumber));
-    container.appendChild(button);
+  
+  if (pages <= 1) return;
+  
+  const paginationWrapper = document.createElement("div");
+  paginationWrapper.className = "pagination-modern";
+  
+  if (activePage > 1) {
+    const firstBtn = createPaginationButton("⬅ Первая", 1, activePage === 1, onPageClick);
+    paginationWrapper.appendChild(firstBtn);
   }
+  
+  if (activePage > 1) {
+    const prevBtn = createPaginationButton("◀", activePage - 1, false, onPageClick);
+    prevBtn.className = "page-btn prev-btn";
+    paginationWrapper.appendChild(prevBtn);
+  }
+  
+  const startPage = Math.max(1, activePage - 2);
+  const endPage = Math.min(pages, activePage + 2);
+  
+  if (startPage > 1) {
+    const dots = document.createElement("span");
+    dots.className = "pagination-dots";
+    dots.textContent = "...";
+    paginationWrapper.appendChild(dots);
+  }
+  
+  for (let i = startPage; i <= endPage; i++) {
+    const btn = createPaginationButton(String(i), i, i === activePage, onPageClick);
+    if (i === activePage) {
+      btn.classList.add("active");
+    }
+    paginationWrapper.appendChild(btn);
+  }
+  
+  if (endPage < pages) {
+    const dots = document.createElement("span");
+    dots.className = "pagination-dots";
+    dots.textContent = "...";
+    paginationWrapper.appendChild(dots);
+  }
+  
+  if (activePage < pages) {
+    const nextBtn = createPaginationButton("▶", activePage + 1, false, onPageClick);
+    nextBtn.className = "page-btn next-btn";
+    paginationWrapper.appendChild(nextBtn);
+  }
+  
+  if (activePage < pages) {
+    const lastBtn = createPaginationButton("Последняя ➡", pages, activePage === pages, onPageClick);
+    paginationWrapper.appendChild(lastBtn);
+  }
+  
+  const info = document.createElement("div");
+  info.className = "pagination-info";
+  info.textContent = `Страница ${activePage} из ${pages}`;
+  paginationWrapper.appendChild(info);
+  
+  container.appendChild(paginationWrapper);
+}
+
+function createPaginationButton(text, pageNumber, isActive, onPageClick) {
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.className = "page-btn";
+  btn.textContent = text;
+  btn.addEventListener("click", () => onPageClick(pageNumber));
+  if (isActive) {
+    btn.classList.add("active");
+  }
+  return btn;
 }
 
 function likeProject(title) {
