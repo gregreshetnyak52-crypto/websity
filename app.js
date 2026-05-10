@@ -914,7 +914,8 @@ function renderPagination(container, pages, activePage, onPageClick) {
   paginationWrapper.className = "pagination-modern";
   
   if (activePage > 1) {
-    const firstBtn = createPaginationButton("⬅ Первая", 1, activePage === 1, onPageClick);
+    const firstBtn = createPaginationButton("◀", 1, activePage === 1, onPageClick);
+    firstBtn.className = "page-btn first-btn";
     paginationWrapper.appendChild(firstBtn);
   }
   
@@ -956,7 +957,8 @@ function renderPagination(container, pages, activePage, onPageClick) {
   }
   
   if (activePage < pages) {
-    const lastBtn = createPaginationButton("Последняя ➡", pages, activePage === pages, onPageClick);
+    const lastBtn = createPaginationButton("▶", pages, activePage === pages, onPageClick);
+    lastBtn.className = "page-btn last-btn";
     paginationWrapper.appendChild(lastBtn);
   }
   
